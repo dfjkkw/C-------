@@ -1,0 +1,22 @@
+#include<iostream>
+#include<conio.h>//使用getch()函数
+#include<stdlib.h>//使用system()函数
+using namespace std;
+//输出九九表
+int main()
+{
+	char key;
+	//循环嵌套
+	int i,j;
+	for (i = 1;i <= 9;i++)
+	{
+		for (j = 1;j <= i;j++)
+		{
+			cout << j << "*" << i << "=" << j * i << "\t";
+		}
+		cout << endl;
+	}
+	key=_getch();//用getch()程序实现阻塞效果
+	//system("pause");//暂停
+	return 0;
+}

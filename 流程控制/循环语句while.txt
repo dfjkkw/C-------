@@ -1,0 +1,28 @@
+//while循环语句
+//第一种
+//while (逻辑表达式) {
+//	<循环体>
+//	};
+//第二种
+//do {
+//	<循环体>
+//	} while (逻辑表达式);
+#include<iostream>
+using namespace std;
+int main()
+{
+	int seven;
+	do {
+		cout << "请输入7的整数倍数:";
+		cin >> seven;
+	} while (seven%7);
+	cout << "你输入正确了" << endl;
+
+	bool right = false;
+	while (!right) {
+		cout << "请输入7的整数倍数:";
+		cin >> seven;
+		if (seven % 7 == 0)right = true;
+	};
+	return 0;
+}

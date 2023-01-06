@@ -1,0 +1,61 @@
+//输入输出流，语句和注释
+#include<iostream>
+using namespace std;
+int  main()
+{
+	int a, b;
+	cout << "hello world\n";
+	cin >> a;
+	cin >> b;
+	cout << "a=";
+	cout << a;
+	cout << "   b=";
+	cout << b;
+	//cin>>a>>b;
+	//cout << "a=" << a << "   b=" << b<<endl;
+	cout << 3.1415026 << endl;
+	cout << setprecision(8) << 3.1415926 << endl;
+	return ;
+}
+------------------------------------------------------------------------------------------
+#include<iostream>
+using namespace std;
+int  main()
+{
+	int a;
+	std::cin >> a;
+	std::cout << "a=" << a << std::endl;
+	return ;
+}
+---------------------------------------------------------------------------------------------
+#include<iostream>
+#include<iomanip>//使用setprecision()函数
+int main()
+{
+	cout << setprecision(5) << 1.23456 << endl;
+	cout << setiosflags(ios::fixed) << 1.23456 << endl;
+	cout << setiosflags(ios::left);//左对齐
+	cout << setw(10) << 2000 << setw(10) << 12 << endl;
+	cout << setw(10) << 5 << setw(10) << 4<< endl;
+
+	cout << resetiosflags(ios::left);//右对齐
+	cout << setw(10) << 2000 << setw(10) << 12 << endl;
+	cout << setw(10) << 5 << setw(10) << 4 << endl;
+	return;
+}
+------------------------------------------------------------------------------------------
+#include<iostream>
+#include<iomanip>//使用setprecision()函数
+using namespace std;
+int main()
+{
+	cout << setbase(8) << 15 << "  " << 16 << endl;//按8进制进行输出
+	cout << oct << 15 << "  " << 16 << endl;//按8进制进行输出
+
+	cout << setbase(16) << 15 << "  " << 16 << endl;//按16进制进行输出
+	cout << hex << 15 << "  " << 16 << endl;//按16进制进行输出
+
+	cout << setbase(10) << 15 << "  " << 16 << endl;//按10进制进行输出
+	cout << dec << 15<< "  " << 16 << endl;//按10进制进行输出
+	return;
+}

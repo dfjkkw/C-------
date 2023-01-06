@@ -1,0 +1,31 @@
+//密码登陆程序
+#include<iostream>
+using namespace std;
+const short MAX_TIMES = 3;
+int main()
+{
+	string  passward;
+	short times = 0;
+	while (true)
+	{
+		cout << "请输入操作口令：";
+		cin >> passward;
+		if (passward != "12345")
+		{
+			cout << "输入" << ++times << "次错误口令"<<endl;//times输出递增后的值
+			if (times < MAX_TIMES) {
+				cout << "你还有" << MAX_TIMES - times << "次输入机会" << endl;
+			}
+			else {//执行到这里的else块表明输入错误口令次数达到了3次
+				cout << "对不起，你无权使用该程序" << endl;
+				return 0;
+			}
+		}
+		else {//假如用户输入正确
+			cout << "口令正确" << endl;
+			break;
+		}
+	}
+	cout << "欢迎使用本程序" << endl;
+	return 0;
+}

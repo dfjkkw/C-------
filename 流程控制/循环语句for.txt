@@ -1,0 +1,28 @@
+//for循环语句
+//for(语句1;逻辑表达式;语句2)
+//	{
+//		<循环体中的语句>
+//	}
+#include<iostream>
+using namespace std;
+int main()
+{
+	int i;
+	for (i = 1;i < 21;i++)
+	{
+		cout << "第" << i << "次" << "输出我要自学网\n";
+	}
+//过七游戏
+	for (i = 1;i < 51;i++)
+	{
+		if (i % 7 == 0 || i % 10 == 0)
+		{
+			cout << "过\t";
+		}
+		else {
+			cout <<i<< "\t";
+		}
+	}
+	cout << endl;
+	return 0;
+}

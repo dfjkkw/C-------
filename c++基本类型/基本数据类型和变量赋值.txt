@@ -1,0 +1,43 @@
+ //short 短型（两字节）（-32768~32767）
+*// unsigned short (0~65536)
+*//int 整型 (4字节) (-2147483648~+2147483647)
+*// unsigned int (0~4294967295)
+*// float 单精度浮点型(4字节） 正（1.17549e-038~3.40282e+038) 负:(-3.40282e+038~-1.17549e-038)
+*// double 双精度浮点型（8字节） 正(2.22507e-308~1.79769e+308) 负(-1.79769e+308~-2.22507e-308)
+* //char 字符型（-128~127） unsigned char (0~255)
+*// bool  布尔型  false/true或0/1
+#include<iostream>
+#include<iomanip>//使用setprecision()函数
+using namespace std;
+int main()
+{
+	short sb=32767;
+	short n = 32768;
+	cout << sb << " " << n << endl;
+	float fit,fit2;
+	fit = 2.08;
+	fit2 = 2.08f;//f表示单精度浮点数
+	cout << fit << " " << fit2 << endl;
+	double dle = 4.57283;
+	cout << dle << endl;
+	char ch;
+	ch='A';
+	cout<<ch<<endl;
+	sb=1;
+	cout<<sb<<endl;
+	sb=sb+5;
+	cout<<sb<<endl;
+	sb = 1;
+	sb = sb + ch;
+	cout << sb << endl;//整型和字符型相加时，字符型会被转化为ascii值
+	cout << (char)65 << endl;
+	bool bl;
+	bl = false;//0
+	cout << bl << endl;
+	bl = true;//1
+	cout << bl << endl;
+	sb = 1;
+	sb = sb + true;
+	cout << sb << endl;
+	return 0;
+}

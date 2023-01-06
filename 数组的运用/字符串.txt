@@ -1,0 +1,23 @@
+//字符串    可以定义一个字符数组，用cout语句对数组名进行输出，会输出自符串
+#include<iostream>
+#include<string>
+using namespace std;
+int main(void)
+{
+	//char str[5] = { 'a','b','c','d','\0' };
+	//char str[5] = "abcd";
+	//cout << str<<endl;
+	char str1[11] = "abcde";
+	char str2[6] = "12345";
+	cout <<"执行strcat前"<< str1 << endl;
+	//strcat(char*,char*)  将后一个字符串接在前一个字符串后面
+	strcat_s(str1, str2);
+	cout << "执行strcat后" << str1 << endl;
+	//strcpy(char*,char*)  将后一个的字符赋值给前一个
+	cout << "执行strcpy前" << str1 << endl;
+	strcpy_s(str1, str2);
+	cout << "执行strcpy后" << str1 << endl;
+	//strlen(char*)    返回字符串的长度
+	cout << "str1的长度是" << strlen(str1) << "个字符" << endl;
+	return 0;
+}

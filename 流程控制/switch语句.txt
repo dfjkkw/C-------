@@ -1,0 +1,28 @@
+//switch语句可供我们分情况处理多个代码分支
+//switch语句
+//switch (表达式或变量) {
+//	case 变量1:……break;
+//	case 变量2:……break;
+//	case 变量3:……break;
+//	……
+//	default:……;
+//	}
+//学生成绩80~100为优，70~79为良，60~69为中，60以下为差
+#include<iostream>
+using namespace std;
+int main()
+{
+	short score;
+	cout << "请输入成绩:";
+	cin >> score;
+	switch (score / 10)
+	{
+	case 10:
+	case 9:
+	case 8:cout << "该成绩为优。\n";break;
+	case 7:cout << "该成绩为良。\n";break;
+	case 6:cout << "该成绩为中。\n";break;
+	default:cout << "该成绩为差。\n";break;
+	}
+	return 0;
+}

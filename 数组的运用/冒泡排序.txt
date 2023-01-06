@@ -1,0 +1,38 @@
+//冒泡排序（从小到大输出)
+#include<iostream>
+#include<time.h>//让你的随机数具有真正的随机性
+using namespace std;
+const short LEN = 10;
+int main(void)
+{
+	int a[LEN];
+	srand(time(0));//srand()函数让我们取得随机种子 time(0)程序运行时间
+	for (int i = 0;i < LEN;i++)
+	{
+		a[i] = rand() % 50 + 1;
+	}
+	for (int i = 0;i < LEN;i++)
+	{
+		cout<<a[i]<<" ";
+	}
+	cout << endl;
+	//排序函数
+	for (int i = 0;i < LEN - 1;i++)
+	{
+		for (int j = 0;j < LEN - 1 - i;j++)
+		{
+			if (a[j] > a[j + 1])
+			{
+				int temp = a[j];
+				a[j] = a[j + 1];
+				a[j + 1] = temp;
+			}
+		}
+	}
+	for (int i = 0;i < LEN;i++)
+	{
+		cout << a[i] << " ";
+	}
+	cout << endl;
+	return 0;
+}

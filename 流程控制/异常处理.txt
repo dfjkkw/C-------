@@ -1,0 +1,51 @@
+//异常处理
+//try {
+//	……
+//	throw 标志变量1
+// 	throw 标志变量2
+//	}
+//catch (定义参数变量)//它必须与标志变量类型一致
+//{
+//	异常代码处理
+//}
+//catch (int x)//它必须与标志变量类型一致
+//{
+//	异常代码处理
+//}
+//catch (char x)//它必须与标志变量类型一致
+//{
+//	异常代码处理
+//}
+#include<iostream>
+using namespace std;
+int main(void)
+{
+	short a, b, c;
+	int flag;//标志变量
+	bool valid;
+	do {
+		valid = true;
+		try {
+			cout << "请为等腰三角形输入三条边长（整数）：" << endl;
+			cout << "a边：";cin >> a;
+			cout << "b边：";cin >> b;
+			cout << "c边：";cin >> c;
+			if (a + b <= c || a + c <= b || b + c <= a)//三条边无法构成三角形
+			{
+				throw flag = 1;
+			}
+			if (a != b && a != c && b != c)//三条边无法构成等腰三角形
+			{
+				throw flag = 2;
+			}
+		}
+		catch (int x)
+		{
+			if (x == 1)cout << "这三条边无法构成三角形" << endl;
+			if (x == 2)cout << "该三条边无法构成等腰三角形" << endl;
+			valid = false;
+		}
+	} while (!valid);
+	cout << "输入数据是正确的" << endl;
+	return 0;
+}
