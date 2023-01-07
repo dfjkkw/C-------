@@ -1,0 +1,31 @@
+//函数的定义方法及作用
+//基本语法
+//返回值类型 函数名（参数表）
+//{
+	//函数体代码
+//}
+//float daoshu(float f)//求倒数的函数
+//{
+	//return f?(1 / f) : 0;
+//}
+//函数内定义的为局部变量，函数外面定义的变量为全局变量
+//定义变量在函数外面时，为全局变量，在整个程序运行过程中都有效
+#include<iostream>
+using namespace std;
+float Daoshu(float f)//求倒数的函数
+{
+	return f?(1 / f) : 0;
+}
+int main(void)
+{
+	float n;
+	cout << "请输入一个数：";
+	cin >> n;
+	float m;//局部变量，离开函数体即失效
+	m = Daoshu(n);
+	if (m)//m不为0时，m转化为bool型就是true,否则为false
+		cout << n << "的倒数为" << m << endl;
+	else
+		cout << "0没有倒数" << endl;
+	return 0;
+}
