@@ -1,16 +1,17 @@
-//宽字符型
+//枚举，字符串和宽字符型
 #include<iostream>
+#include<locale>
 #include<string>
 using namespace std;
-enum level{POOR,MEDIUM,GOOD,EXCELLENCE};//枚举
+enum level{POOR,MEDIUM,GOOD,EXCELLENCE};//枚举(输出时分别为0,1,2,3)
 int main()
 {
 	//枚举
-	level my_score, my_score2, my_score3;
-	my_score = MEDIUM;
+	level my_score1, my_score2, my_score3;
+	my_score1 = MEDIUM;
 	my_score2 = POOR;
 	my_score3 = GOOD;
-	cout << my_score << endl;
+	cout << my_score1 << endl;
 	cout << my_score2 << endl;
 	cout << my_score3 << endl;
 	//字符串
@@ -26,13 +27,18 @@ int main()
 	cout << str4[3] << " ";
 	cout << str4[4] << endl;
 	//宽字符型wchar_t型变量用来保存汉字
-	setlocale(LC_ALL, "chs");//输出汉字要先执行的函数
+	setlocale(LC_ALL, "chs");//输出汉字要先执行的函数,告诉mbstowcs目前cstr串中包含的是chs编码的字符串.
 	wchar_t hz1, hz2;
 	hz1 = L'中';
 	hz2 = L'文';
-	cout << hz1 << hz2 << endl;//cout不能输出宽字符型
+	//cout << hz1 << hz2 << endl;//cout不能输出宽字符型,输出为一串数字
 	printf("如何输出中文呢？\n");
-	printf("%wc%wc\n", hz1, hz2);//%wc输出宽字符型
+	printf("%wc%wc\n", hz1, hz2);//%wc输出宽字符型,VS可以正常输出为中文
+	//devc++宽字符型输出中文
+	wchar_t aa[]=L"测试";
+	wchar_t *bb=L"伟大的中国";
+	wprintf(L"%ls\n",aa);
+	wprintf(L"%ls\n",bb);
 	setlocale(LC_ALL,"C");//恢复原来的设置
 	return 0;
 }

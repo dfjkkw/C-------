@@ -1,47 +1,29 @@
 //输入输出流，语句和注释
 #include<iostream>
-using namespace std;
-int  main()
-{
-	int a, b;
-	cout << "hello world\n";
-	cin >> a;
-	cin >> b;
-	cout << "a=";
-	cout << a;
-	cout << "   b=";
-	cout << b;
-	//cin>>a>>b;
-	//cout << "a=" << a << "   b=" << b<<endl;
-	cout << 3.1415026 << endl;
-	cout << setprecision(8) << 3.1415926 << endl;
-	return ;
-}
-------------------------------------------------------------------------------------------
-#include<iostream>
-using namespace std;
+//using namespace std;//不使用调用命名空间std内定义的所有标识符输出
 int  main()
 {
 	int a;
 	std::cin >> a;
 	std::cout << "a=" << a << std::endl;
-	return ;
+	return 0 ;
 }
 ---------------------------------------------------------------------------------------------
 #include<iostream>
 #include<iomanip>//使用setprecision()函数
+using namespace std;
 int main()
 {
-	cout << setprecision(5) << 1.23456 << endl;
-	cout << setiosflags(ios::fixed) << 1.23456 << endl;
+	cout << setprecision(5) << 1.23456 << endl;//输出为1.2346
+	cout << setiosflags(ios::fixed) << 1.23456 << endl;//输出为1.23456
 	cout << setiosflags(ios::left);//左对齐
-	cout << setw(10) << 2000 << setw(10) << 12 << endl;
+	cout << setw(10) << 2000 << setw(10) << 12 << endl;//setw(int n)函数表示输出字符宽度设置
 	cout << setw(10) << 5 << setw(10) << 4<< endl;
 
 	cout << resetiosflags(ios::left);//右对齐
 	cout << setw(10) << 2000 << setw(10) << 12 << endl;
 	cout << setw(10) << 5 << setw(10) << 4 << endl;
-	return;
+	return 0;
 }
 ------------------------------------------------------------------------------------------
 #include<iostream>
@@ -57,5 +39,5 @@ int main()
 
 	cout << setbase(10) << 15 << "  " << 16 << endl;//按10进制进行输出
 	cout << dec << 15<< "  " << 16 << endl;//按10进制进行输出
-	return;
+	return 0;
 }

@@ -11,15 +11,15 @@ int main()
 {
 	int a = 10, b;
 	b = a >> 1;
-	cout <<"b= " << b << endl;
+	cout <<"b= " << b << endl;//5
 	a = 7;
 	b = a << 1;
-	cout << "b= " << b << endl;
+	cout << "b= " << b << endl;//14
 	a <<= 1;//a=a<<1;
-	cout << "a= " << a << endl;
+	cout << "a= " << a << endl;//14
 	a = 9, b = 3;
-	cout <<"a&b= " << (a & b) << endl;
-	cout << "a|b= " << (a | b) << endl;
-	cout << "a^b= " << (a ^ b) << endl;
+	cout <<"a&b= " << (a & b) << endl;//1
+	cout << "a|b= " << (a | b) << endl;//11
+	cout << "a^b= " << (a ^ b) << endl;//10
 	return 0;
 }

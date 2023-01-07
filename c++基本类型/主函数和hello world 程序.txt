@@ -1,0 +1,22 @@
+//主函数和hello world程序
+#include<iostream>
+#include<iomanip>//使用setprecision()函数
+using namespace std;
+int  main()
+{
+	int a, b;
+	cout << "hello world\n";
+	cin >> a;
+	cin >> b;
+	cout << "a=";
+	cout << a;
+	cout << "   b=";
+	cout << b<<endl;
+	/*
+	cin>>a>>b;
+	cout << "a=" << a << "   b=" << b<<endl;
+    */
+	cout << 3.1415926 << endl;//输出3.14159
+	cout << setprecision(8) << 3.1415926 << endl;//浮点数的有效数字个数
+	return 0;
+}
