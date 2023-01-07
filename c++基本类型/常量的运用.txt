@@ -1,0 +1,17 @@
+//常量的运用
+//常量和变量命名的时候都应与它要表达的意思相关
+#include<iostream>
+using namespace std;
+const double PI=3.1415926;//PI为常量
+const int LEFT_MARIGIN=30;//左边界
+const int TOP_MARGIN=25;//上边界
+int main()
+{
+	double r=2.0;
+	double girth;
+	girth=r*2*PI;
+	cout<<"周长为"<<girth<<endl;
+	r=3.0;
+	girth=r*2*3.1415926;
+	return 0;
+}
