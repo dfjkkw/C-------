@@ -1,0 +1,22 @@
+/*在c++中，我们可以把一个变量m定义为另一个变量n的引用。一个引用一旦建立，对
+引用m所做的一切操作都将发生在初始的变量n身上。可以理解为m就是n,只是名字不同。
+定义方式为：变量类型   &变量名=想要引用的变量*/
+//引用
+#include<iostream>
+using namespace std;
+int main()
+{
+	short n = 10;
+	short& m = n;
+	cout << "m=" << m << endl;
+	n += 10;
+	cout << "m=" << m << endl;
+	m--;
+	cout << "n=" << n << endl;
+	short x = 15;
+	m = x;//此处赋值不能让m和x建立引用关系，只能传递值
+	cout << "m=" << m << "\t " << "n = " << n << endl;
+	m += 5;//n的值会随着改变，x不会
+	cout << "m=" << m << "\t" << "n=" << n << "\t" << "x=" << x << endl;
+	return 0;
+}

@@ -1,0 +1,26 @@
+//按指针访问数据
+#include<iostream>
+using namespace std;
+int main(void)
+{
+	int n1 = 10, n2 = 20, * p1, * p2;
+	p1 = &n1;
+	p2 = &n2;
+	cout << "p1的地址所保存的数值：" << *p1 << endl;
+	cout << "p2的地址所保存的数值：" << *p2 << endl;
+	p1 = p2;//p1->n2
+	cout << "p1的地址所保存的数值：" << *p1 << endl;
+	char s1[11]="我要自学网";
+	cout << "s1:" << s1 << endl;
+	char* s2;
+	s2 = s1;
+	char s3[11];
+	strcpy_s(s3, s1);
+	cout << "s2:" << s2 << endl;
+	cout << "s3:" << s3 << endl;
+	cout << "*********************" << endl;
+	strcpy_s(s1, "自学网我要");//s1地址发生改变，s2与s1在同一个地址也随之改变
+	cout << "s2:" << s2 << endl;
+	cout << "s3:" << s3 << endl;
+	return 0;
+}
