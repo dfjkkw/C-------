@@ -1,0 +1,27 @@
+//递归函数
+#include<iostream>
+#include<iomanip>//设置输出项所占字符数
+#include<time.h>//使每次取得的随机种子不同
+using namespace std;
+int sum(int* array, int lo, int hi)//对传入的数组指针求出从下标lo到hi结束部分的和
+{
+	if (lo == hi)return array[lo];//递归基，返回该项的值
+	int mid = (lo + hi) >> 1;
+	return sum(array, lo, mid) + sum(array, mid+1, hi);
+}
+int main(void)
+{
+	int array[7];
+	srand(time(0));
+	for (int i = 0;i < 7;i++)
+	{
+		array[i] = rand() % 10;
+	}
+	for (int i = 0;i < 7;i++)
+	{
+		cout << setw(5) << array[i];
+	}
+	cout << endl;
+	cout << "它们的和是" << sum(array, 0, 6) << endl;
+	return 0;
+}

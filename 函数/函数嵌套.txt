@@ -1,0 +1,51 @@
+//函数的嵌套
+//约瑟夫环问题
+#include<iostream>
+using namespace std;
+void NextPosition(int& p, int tail)//p是当前猴子下标，执行函数之后的到下一个下标，tail表示最后一只后自动下标
+{
+	p = (p < tail ? p + 1 : 0);//暂时不考虑被淘汰掉的猴子
+}
+int NextNumber(int n, int tail)//参数输入当前所报的数字和所要报的最大的数字
+{
+	return n == tail ? 1: n + 1;
+}
+int MonkeyKing(int total, int cycle)//参数输入猴子总数和所报的最大数字
+{
+	bool* failure = new bool[total];//建立total只猴子，为bool型，识别是否淘汰，是为true，否为false
+	memset(failure, 0, sizeof(bool) * total);//所有猴子初始化为0（false）也就是没有被淘汰
+	int position = total - 1;//当前位置确定为最后一只猴子
+	int said = 0;//所报的数字
+	int remained = total;//剩下的猴子数
+	while (remained > 1)
+	{
+		NextPosition(position, total - 1);//当前猴子移到下一只去
+		if (failure[position] == false)
+		{
+			said = NextNumber(said, cycle);//被淘汰的猴子报出应该报的数字
+			cout << "第" << position + 1 << "只猴子报" << said;
+			if (said == cycle)//判断这只猴子报出的数是否为最大值，如果是，则要将他们淘汰
+			{
+				failure[position] = true;//将这只猴子淘汰出去
+				cout << ",被淘汰,剩" << --remained << "个" << endl;
+			}
+			else {
+				cout << "。" << endl;
+			}
+		}
+	}
+	int i;
+	for (i = 0;failure[i];i++);
+	delete[]failure;
+	return i;//返回没有被淘汰猴子的下标
+}
+int main(void)
+{
+	int total, cycle;//保存猴子的总数,所要报的最大值
+	cout << "请输入猴子的总数：";
+	cin >> total;
+	cout << "请输入所报最大数：";
+	cin >> cycle;
+	cout << "第" << MonkeyKing(total, cycle) +1 << "个猴子是猴王" << endl;
+	return 0;
+}

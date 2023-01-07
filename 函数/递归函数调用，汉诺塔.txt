@@ -1,0 +1,20 @@
+//汉诺塔游戏
+#include<iostream>
+using namespace std;
+void Hanoi(int remained, char from, char mid, char to)//remained盘子数量，from盘子移出的柱子，mid中转柱子，to盘子要到达的柱子
+{
+	if (remained == 1) { 
+		cout << "从" << from << "柱子移到" << to << "柱子" << endl; 
+	}
+	else {
+		Hanoi(remained - 1, from, to, mid);
+		cout << "从" << from << "柱子移到" << mid << "柱子" << endl;
+		Hanoi(remained - 1, mid, from, to);
+		cout << "从" << mid << "柱子移到" << to << "柱子" << endl;
+	}
+}
+int main(void)
+{
+	Hanoi(5, 'A', 'B', 'C');
+	return 0;
+}

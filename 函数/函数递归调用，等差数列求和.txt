@@ -1,0 +1,15 @@
+//递归求和等差数列
+#include<iostream>
+using namespace std;
+const int STEP = 3;
+int sum(int head, int tail)
+{
+	if (head >= tail)return tail;
+	return head + sum(head + STEP, tail);
+}
+int main(void)
+{
+	cout << "2+5+8+……+47的和是" << sum(2, 47) << endl;
+	cout << "2+5+8+11的和是" << sum(2,11)<<endl;
+	return 0;
+}

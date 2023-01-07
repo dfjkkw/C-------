@@ -1,0 +1,50 @@
+//指针参数和引用参数
+#include<iostream>
+#include<stdlib.h>
+using namespace std;
+int* _p;
+void PassValue(int n)
+{
+	n *= 2;
+	cout << "n的值：" << n << endl;
+}
+void Pointer(int* p)
+{
+	*p *= 2;
+	cout << "指针p的地址：" << p << endl;
+	cout << "指针p地址所保存的数值：" << *p << endl;
+}
+void Pointer2(int* p)
+{
+	p = _p;
+	*p *= 2;
+	cout << "指针p的地址：" << p << endl;
+	cout << "指针p地址所保存的数值：" << *p << endl;
+}
+void Reference(int& _m)//引用
+{
+	_m *= 2;
+}
+int main(void)
+{
+	int m = 20;
+	int* pointer = &m;
+	cout << "m的地址为" << &m << endl;
+	PassValue(m);
+	cout << "m的值为" << m << endl;//参数采用传值时，形参和实参是两个地址不同的变量，形参在函数内进行的改变不会影响实参
+	system("pause");
+	cout << "m的地址为" << &m << endl;
+	Pointer(pointer);
+	cout << "m的值为" << m << endl;//参数为指针时，形参和实参都指向同一地址
+	system("pause");
+	m = 20;
+	_p = new int;
+	*_p = 50;
+	Pointer2(pointer);
+	cout << "m的值为" << m << endl;
+	cout << "指针_p地址所保存的数值：" << *_p << endl;
+	m = 20;
+	Reference(m);
+	cout << "m的值为" << m << endl;
+	return 0;
+}
