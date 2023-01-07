@@ -1,0 +1,84 @@
+//虚函数
+//虚函数：在某基类中声明为 virtual 并在一个或多个派生类中被重新定 义的成员函数。
+//纯虚函数：是一种特殊的虚函数，使用virtual关键字，并且在其后面加上=0。
+//抽象基类：在基类中加入至少一个纯虚函数，使基类成为抽象类。
+#include<iostream>
+#include<string>
+using namespace std;
+//建筑物
+class Building {
+protected://保护类成员允许子类访问，而私有类不允许
+	string name;//名字
+	float height;//高度
+	float area;//占地面积
+public://公有
+	Building(string n, float h, float a) :name(n), height(h), area(a) {};
+	Building(const Building& bd1)
+	{
+		name = bd1.name;
+		height = bd1.height;
+		area = bd1.area;
+	}
+	string GetName() { return name; }
+	float GetHeight() { return height; }
+	float GetArea() { return area; }
+	//friend关键字承认一个外部函数为友元，即允许他访问私有成员
+	friend bool Correction(Building&, float, int);//这里的参数表只写类型就可以了
+    	virtual float FoundationDepth() { return height / 15; }
+	float HeightDifference(Building& bd) { return height - bd.height; }
+	float HeightDifference(float h) { return height - h; }
+	//把运算符的重载看成类的公有成员
+	Building operator+(float difference)
+	{
+		Building bd(*this);//在类定义当中关键字this表示当前实例的指针，指针前加*则得到其值
+		bd.height += difference;
+		return bd;
+	}
+	//用类实例之间的比较代替两者面积的比较，在类里面实现，大于号的左运算数即为当前实例，右运算数即为传入的参数
+	bool operator>(Building& bd)
+	{
+		//if (this->area > bd.area)return true;
+		//else return false;
+		return this->area > bd.area;
+	}
+};
+class Mansion :public Building 
+{
+private:
+	unsigned short stories;//楼层数
+public:
+	Mansion(string n, float h, float a,unsigned short s):Building(n,h,a),stories(s){}//此时子类构造参数，若无参数是错误的
+	void SetStories(unsigned short s) { stories = s; }
+	unsigned short GetStories() { return stories; }
+	//float FoundationDepth() { return height / 14; }
+};
+bool Correction(Building& building, float difference, int type)//修改Building数据的函数
+{
+	switch (type) {
+	case 1:building.height += difference;return true;
+	case 2:building.area += difference;return true;
+	default:return false;
+	}
+}
+//在类的外部重载运算符
+float operator+(Building& a, Building& b){return a.GetArea() + b.GetArea();}
+int main(void)
+{
+	//若自己写了带参构造函数，则编译器不会再提供无参构造函数
+	Building bd("水塔", 20, 8);
+	Building bd2(bd);
+	bd = bd + 7;
+	cout << bd.GetName() << "(bd)的高度为" << bd.GetHeight() << "米,占地面积为" << bd.GetArea() << "平方米." << endl;
+	cout << "两个建筑面积之和是" << bd + bd2 << "平方米." << endl;
+	Building bd3("洋房", 5, 90);
+	if (bd > bd3)cout << "水塔占地面积大于洋房" << endl;
+	else cout << "水塔占地面积不大于洋房" << endl;
+	Mansion mansion1("公寓", 15, 300, 4);
+	cout << "mansion1的占地面积为" << mansion1.GetArea() << "平方米\n";
+	//子类同样继承了FoundationDepth()函数
+	cout << "mansion1的地基深度为" << mansion1.FoundationDepth() << "米\n";
+	//虚函数
+	Building* mansion2 = new Mansion("洋房", 15, 300, 4);
+	cout << "mansion2的地基深度为" << mansion2->FoundationDepth() << "米\n";
+	return 0;
+}

@@ -1,0 +1,70 @@
+//运算符重载
+#include<iostream>
+#include<string>
+using namespace std;
+//建筑物
+class Building {
+private://私有
+	string name;//名字
+	float height;//高度
+	float area;//占地面积
+public://公有
+	Building(string n, float h, float a) :name(n), height(h), area(a) {};
+	Building(const Building& bd1)
+	{
+		name = bd1.name;
+		height = bd1.height;
+		area = bd1.area;
+	}
+	string GetName() { return name; }
+	float GetHeight() { return height; }
+	float GetArea() { return area; }
+	//friend关键字承认一个外部函数为友元，即允许他访问私有成员
+	friend bool Correction(Building&, float, int);//这里的参数表只写类型就可以了
+	float FoundationDepth1(Building& bd) { return height / 15; }
+	float HeightDifference(Building& bd) { return height - bd.height; }
+	float HeightDifference(float h) { return height - h; }
+	//把运算符的重载看成类的公有成员
+	Building operator+(float difference)
+	{
+		Building bd(*this);//在类定义当中关键字this表示当前实例的指针，指针前加*则得到其值
+		bd.height += difference;
+		return bd;
+	}
+	//用类实例之间的比较代替两者面积的比较，在类里面实现，大于号的左运算数即为当前实例，右运算数即为传入的参数
+	bool operator>(Building& bd)
+	{
+		//if (this->area > bd.area)return true;
+		//else return false;
+		return this->area > bd.area ;
+	}
+};
+bool Correction(Building& building, float difference, int type)//修改Building数据的函数
+{
+	switch (type) {
+	case 1:building.height += difference;return true;
+	case 2:building.area += difference;return true;
+	default:return false;
+	}
+}
+float FoundationDepth(Building& bd)
+{
+	return bd.GetHeight() / 15;
+}
+float operator+(Building&a,Building&b)//在类的外部重载运算符
+{
+	return a.GetArea() + b.GetArea();
+}
+int main(void)
+{
+	//若自己写了带参构造函数，则编译器不会再提供无参构造函数
+	Building bd("水塔", 20, 8);
+	Building bd2(bd);
+	bd = bd + 7;
+	cout << bd.GetName() << "(bd)的高度为" << bd.GetHeight() << "米,占地面积为" << bd.GetArea() << "平方米." << endl;
+	cout << "两个建筑面积之和是" << bd + bd2 <<"平方米." << endl;
+	Building bd3("洋房", 5, 90);
+	if (bd > bd3)cout << "水塔占地面积大于洋房" << endl;
+	else cout << "水塔占地面积不大于洋房" << endl;
+	return 0;
+}

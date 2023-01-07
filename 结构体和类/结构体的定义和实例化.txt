@@ -1,0 +1,22 @@
+//结构体的定义和实例化
+#include<iostream>
+#include<string.h>
+using namespace std;
+struct Book {
+	char name[30];//书名
+	float price;//价格
+	unsigned short pages;//页数
+	bool cover;//是否精装
+};
+int main(void)
+{
+    	Book mybook;
+	strcpy_s(mybook.name, "我要自学网教程");
+	//mybook.price = 35.5f;
+	mybook.pages = 242;
+	mybook.cover = false;
+	cout << "请输入书的单价:";
+	cin >> mybook.price;
+	cout << "根据您的输入，这本" << "《" << mybook.name << "》" << "价格是" << mybook.price << ",共" << mybook.pages << "页" << endl;
+	return 0;
+}

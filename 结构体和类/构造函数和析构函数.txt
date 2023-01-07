@@ -1,0 +1,88 @@
+//构造函数和析构函数
+#include<iostream>
+using namespace std;
+const short NAME = 1;
+const short AGE = 2;
+class Human {
+private://私有成员只能被该类自己的过程调用
+	char name[20];//姓名
+	unsigned short age;//年龄
+	char* greeting;
+	//char greeting[100];//打招呼内容,若要追求严格，greeting可以用宽字符wchar_t
+public:
+	//构造函数，如果构造函数不同，则参数不同
+	Human()
+	{
+		strcpy_s(name, "匿名者");
+		age = 12;
+		greeting = new char[100];
+		strcpy_s(greeting,100, "你好");
+		//cout << "执行无参构造函数"<<endl;
+	}
+	Human(char* n, unsigned short a, char* g)
+	{
+		greeting = new char[100];
+		SetInformation(n, a, g);
+		//cout << "执行带参构造函数" << endl;
+	}
+	//析构函数  C2660错误
+	//~Human()
+	//Human*man
+	//man=new Human;	或man=new Human("...",42,"...");
+	//delete man
+	~Human() { delete greeting; }//释放内存空间
+	bool SetGreeting(char* g)//SetGreeting()函数相当于”教人“一种打招呼的话语,输入打招呼的内容
+	{
+		if (g == NULL || strcmp(g, "") == 0)return false;
+		else
+			strcpy_s(greeting,100, g);
+		return true;
+	}
+	bool SetName(char* n)//输入姓名
+	{
+		if (n == NULL || strcmp(n, "") == 0)return false;
+		else
+			strcpy_s(name, n);
+		return true;
+	}
+	void SetAge(unsigned short a)//输入年龄
+	{
+		age = a;
+		return;
+	}
+	void MakeGreeting()
+	{
+		cout << name << "：" << greeting << endl;
+	}
+	void SelfIntroduction(short items)
+	{
+		if (items == 0) return;//没有自我介绍的内容
+		cout << name << "：" << "我";
+		if (items & NAME)cout << "叫" << name << "。";//if条件用到了位与运算,位运算结果非零时，相当于true
+		if (items & AGE)cout << age << "岁了。";
+		cout << endl;
+		return;
+	}
+	bool SetInformation(char* n, unsigned short a, char* g)
+	{
+		if (!SetName(n))return false;
+		SetAge(a);
+		if (!SetGreeting(g))return false;
+		return true;
+	}
+};
+int main()
+{
+	Human man;
+	Human person("大码农", 44, "早上好!");//调用带参构造函数，当然要在实例名后面加参数表
+	man.MakeGreeting();
+	man.SelfIntroduction(NAME|AGE);
+	person.MakeGreeting();
+	person.SelfIntroduction(NAME|AGE);
+	Human* people;
+	people = new Human;
+	people->MakeGreeting();
+	people->SetName("程序员");
+	people->SelfIntroduction(NAME);
+	return 0;
+}

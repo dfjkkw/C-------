@@ -1,0 +1,26 @@
+//自定义头文件
+//头文件也和cpp文件一样需要通过编译
+#include<iostream>
+#include"buildingdef.h"//要注意头文件使用的先后顺序，不要造成未定义就先使用的现象
+using namespace std;
+string Building::GetName() { return name; };
+float Building::GetHeight() { return height; };
+float Building::GetArea() { return area; };
+//修改Building数据的函数
+bool Correction(Building& building, float difference, int type)//注意building类型的参数需要是一个引用，才能修改到他的值
+{
+	switch (type) {
+	case 1:building.height += difference;return true;
+	case 2:building.area += difference;return true;
+	default:return false;
+	}
+}
+int main(void)
+{
+	//若自己写了带参构造函数，则编译器不会再提供无参构造函数
+	Building bd("水塔", 20, 8);
+	cout << bd.GetName() << "的高度为" << bd.GetHeight() << "米,占地面积为" << bd.GetArea() << "平方米" << endl;
+	Correction(bd, -1, 2);//建立引用传入的函数即参数本身
+	cout << bd.GetName() << "的高度为" << bd.GetHeight() << "米,占地面积为" << bd.GetArea() << "平方米" << endl;
+	return 0;
+}

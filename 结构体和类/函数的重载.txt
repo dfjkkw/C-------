@@ -1,0 +1,55 @@
+//函数的重载
+#include<iostream>
+#include<string>
+using namespace std;
+//建筑物
+class Building {
+private://私有
+	string name;//名字
+	float height;//高度
+	float area;//占地面积
+public://公有
+	Building(string n, float h, float a) :name(n), height(h), area(a) {};
+	Building(const Building& bd1)
+	{
+		name = bd1.name;
+		height = bd1.height;
+		area = bd1.area;
+	}
+	string GetName() { return name; }
+	float GetHeight() { return height; }
+	float GetArea() { return area; }
+	//friend关键字承认一个外部函数为友元，即允许他访问私有成员
+	friend bool Correction(Building&, float, int);//这里的参数表只写类型就可以了
+	float FoundationDepth1(Building& bd) { return height / 15; }
+	float HeightDifference(Building& bd) { return height - bd.height; }
+	float HeightDifference(float h) { return height - h; }
+};
+bool Correction(Building& building, float difference, int type)//修改Building数据的函数
+{
+	switch (type) {
+	case 1:building.height += difference;return true;
+	case 2:building.area += difference;return true;
+	default:return false;
+	}
+}
+float FoundationDepth(Building& bd)
+{
+	return bd.GetHeight() / 15;
+}
+int main(void)
+{
+	//若自己写了带参构造函数，则编译器不会再提供无参构造函数
+	Building bd("水塔", 20, 8);
+	cout << bd.GetName() << "的高度为" << bd.GetHeight() << "米,占地面积为" << bd.GetArea() << "平方米" << endl;
+	Correction(bd, -1, 2);//建立引用传入的函数即参数本身
+	cout << bd.GetName() << "的高度为" << bd.GetHeight() << "米,占地面积为" << bd.GetArea() << "平方米" << endl;
+	Building bd2(bd);
+	cout << bd2.GetName() << "(bd2)的高度为" << bd2.GetHeight() << "米,占地面积为" << bd2.GetArea() << "平方米" << endl;
+	cout << "bd2的地基深度为" << FoundationDepth(bd2) << "米" << endl;
+	cout << "bd2的地基深度为" << bd2.FoundationDepth1(bd2) << "米" << endl;
+	Correction(bd, 3, 1);
+	cout << "bd与bd2的高度之差" << bd.HeightDifference(bd2) << "米\n";
+	cout << "bd2与bd的高度之差" << bd2.HeightDifference(bd.GetHeight()) << "米\n";
+	return 0;
+}

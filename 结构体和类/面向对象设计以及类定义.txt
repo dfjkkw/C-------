@@ -1,0 +1,63 @@
+//面向对象设计以及类定义
+#include<iostream>
+using namespace std;
+const short NAME = 1;
+const short AGE = 2;//NAME|AGE=3，若greeting函数输入参数NAME|AGE即按位或,将会既介绍姓名又介绍年龄
+//人的类
+class Human{
+private://私有成员只能被该类自己的过程调用
+	char name[20];//姓名
+	unsigned short age;//年龄
+	char greeting[100];//打招呼内容,若要追求严格，greeting可以用宽字符wchar_t
+public:
+	bool SetGreeting(char* g)//SetGreeting()函数相当于”教人“一种打招呼的话语,输入打招呼的内容
+	{
+		if (g == NULL || strcmp(g, "") == 0)return false;
+		else 
+			strcpy_s(greeting, g);
+		return true;
+	}
+	bool SetName(char* n)//输入姓名
+	{
+		if (n == NULL || strcmp(n, "") == 0)return false;
+		else
+			strcpy_s(name, n);
+		return true;
+	}
+	void SetAge(unsigned short a)//输入年龄
+	{
+		age = a;
+		return;
+	}
+	void MakeGreeting()
+	{
+		cout << name << "：" << greeting << endl;
+	}
+	void SelfIntroduction(short items)
+	{
+		if (items == 0) return ;//没有自我介绍的内容
+		cout <<name<<"：" << "我";
+		if (items & NAME)cout <<"叫" << name << "。";//if条件用到了位与运算,位运算结果非零时，相当于true
+		if (items & AGE)cout << age << "岁了。";
+		cout << endl;
+		return;
+	}
+	bool SetInformation(char* n, unsigned short a, char* g)
+	{
+		if (!SetName(n))return false;
+		SetAge(a);
+		if (!SetGreeting(g))return false;
+		return true;
+	}
+};
+int main(void)//找到 C/C++ -> 语言 ->符合模式 ->将‘是’改为‘否’更改C2664
+{
+	Human man;//Human是类名，而man是实例名或叫变量名,用man加.只能调用public函数
+	//if (!man.SetName("小码农"))return -1;
+	//man.SetAge(22);
+	//if(!man.SetGreeting("早上好")) return -1;
+	if (!man.SetInformation("小码农",23, "早上好!")) return -1;
+	man.MakeGreeting();
+	man.SelfIntroduction(NAME|AGE);
+	return 0;
+}

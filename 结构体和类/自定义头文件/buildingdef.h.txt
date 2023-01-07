@@ -1,0 +1,19 @@
+#pragma once
+//这里的宏识别当前头文件是否被编译过,如果当前头文件被二次包括，编译器会发现BUILDING_H已经被定义过，从而跳到endif后面去
+#ifndef BUILDING_H//假如没有定义
+#define BUILDING_H
+class Building {
+private://私有
+	string name;//名字
+	float height;//高度
+	float area;//占地面积
+public://公有
+	Building(string n, float h, float a) :name(n), height(h), area(a) {};
+	string GetName(); //{ return name; }
+	float GetHeight();// { return height; }
+	float GetArea();// { return area; }
+	//friend关键字承认一个外部函数为友元，即允许他访问私有成员
+	friend bool Correction(Building&, float, int);//这里的参数表只写类型就可以了
+};
+#endif 
+//另一种代码习惯：头文件只对类成员函数进行声明，具体实现放在其他地方
