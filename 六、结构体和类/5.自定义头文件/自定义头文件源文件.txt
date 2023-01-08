@@ -1,8 +1,8 @@
 //自定义头文件
 //头文件也和cpp文件一样需要通过编译
 #include<iostream>
-#include"buildingdef.h"//要注意头文件使用的先后顺序，不要造成未定义就先使用的现象
 using namespace std;
+#include"buildingdef.h"//要注意头文件使用的先后顺序，不要造成未定义就先使用的现象
 string Building::GetName() { return name; };
 float Building::GetHeight() { return height; };
 float Building::GetArea() { return area; };
