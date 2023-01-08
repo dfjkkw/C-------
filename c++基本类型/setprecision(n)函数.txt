@@ -1,0 +1,15 @@
+//setprecision是一个计算机函数，功能是控制输出流显示浮点数的有效
+//数字个数，如果和fixed合用的话，可以控制小数点后面有几位。
+#include<iostream>
+#include<iomanip>
+using namespace std;
+int main()
+{
+	cout << 12345.0 << endl;//输出12345
+	//cout<<fixed<<setprecision(2)<<123.456<<endl;/*如果在这个位置就加上fixed的话，后面的输出全部都按照fixed处理*/
+	cout << setprecision(4) << 3.1415926 << endl;//输出的结果是3.1416
+	cout << setprecision(3) << 12345.0 << endl;//输出的结果是 "1.23e+004 "
+	cout << fixed << setprecision(2) << 123.456 << endl;//输出的结果是123.46，要进行四舍五入
+	cout << showpoint << 12345.0 << endl;//输出小数部分末尾为0的数，输出12345.00
+	return 0;
+}
