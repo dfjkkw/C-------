@@ -1,0 +1,43 @@
+//student类成员函数
+class Student {
+private:
+	char name[12];//姓名
+	char id[10];//学号
+	float math;//数学成绩
+	float english;//英语成绩
+	float computer;//计算机成绩
+public:
+	Student() {};
+	Student(char* n) { strcpy_s(name, n); }
+	Student(char *n,char *i){ strcpy_s(name, n); strcpy_s(id, i);}
+	void SetName(char *n){ strcpy_s(name, n); }
+	void SetMath(float m) { math = m; }
+	void SetEnglish(float e) { english=e; }
+	void SetComputer(float c) { computer=c; }
+	string GetName() { return name; }
+	string GetID() { return id; }
+	void SetAllScores(float m, float e, float c) 
+	{
+		math = m;english = e;computer = c;
+	}
+	float GetSum() { return math + english + computer; }
+	bool Match(char* str, short flag)//flag=1,与姓名进行匹配；flag=2。与学号进行匹配；
+	{
+		/*
+		if (flag == 1)
+			return strcmp(name, str) == 0;
+		else
+			return strcmp(id, str) == 0;
+		*/
+		//此处三目运算符与之前的if***else***一样
+		return flag == 1 ? strcmp(name, str) == 0 : strcmp(id, str) == 0;
+	}
+	float GetMath() { return math; }//取得数学成绩
+	float GetEnglish() { return english; }//取得英语成绩
+	float GetComputer() { return computer; }//取得计算机成绩
+	void Print()
+	{
+		cout << name << '\t' << id << endl;
+		cout << "数学" << setprecision(1) << setiosflags(ios::fixed) << math << '\t' << "英语" << english << '\t' << "计算机" << computer << endl;
+	}
+};

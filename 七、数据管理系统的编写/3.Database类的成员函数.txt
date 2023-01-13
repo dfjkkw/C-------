@@ -1,0 +1,208 @@
+//Database类的成员函数
+class DataBase//数据集
+{
+private:
+	Student stu[Max_Size];//学生数组
+	short size;//实际的学生数
+public:
+	DataBase() { size = 0; }
+	bool Push(char* n, char* i, float m, float e, float c)
+	{
+		if (size == Max_Size)return false;
+		Student st(n, i);st.SetAllScores(m, e, c);
+		stu[size++] = st;
+		return true;
+	}
+	bool Push()
+	{
+		if (size == Max_Size)
+		{
+			cout << "系统不能容纳更多学生。" << endl;
+			system("pause");
+			return false;
+		}
+		char n[12], i[10];
+		cout << "请输入要添加的学生姓名：";cin >> n;
+		int idx;//循环变量
+		do {
+			cout << "请输入该学生的学号：";cin >> i;
+			for (idx = 0;idx < size;idx++)
+				if (stu[idx].Match(i, 2))
+				{
+					cout << "该学号已存在，不能重复输入！" << endl;
+					break;
+				}
+		} while (idx < size);
+		Student stu_tmp(n, i);
+		float m, e, c;
+		cout << "请输入该学生数学成绩：";cin >> m;
+		cout << "请输入该学生英语成绩：";cin >> e;
+		cout << "请输入该学生计算机成绩：";cin >> c;
+		stu_tmp.SetAllScores(m, e, c);
+		stu[size++] = stu_tmp;
+		cout << "添加成功！" << endl;
+		system("pause");
+		return true;
+	}
+	short AimedSearch(short start_id, char* str, short flag)
+	{
+		//遍历数组各个元素，依次调用Match()成员函数进行匹配
+		for (short i = start_id;size;i++)
+		{
+			if (stu[i].Match(str, flag))
+			{
+				stu[i].Print();//显示信息
+				return i;
+			}
+		}
+		return -1;//返回-1表示没有找到
+	}
+	//实现查找功能是Search()嵌套调用AimedSearch()来实现
+	short Search()//实现查找功能，提供用户输入接口
+	{
+		short choice;//接受用户输入的字段选择
+		do {
+			cout << "请问你要按什么条件搜索？1.姓名，2.学号：" ;
+			cin >> choice;
+		} while (choice!=1&&choice!=2);
+		char match[12];
+		cout << "请输入你要找的" << (choice == 1 ? "姓名" : "学号") << "：";
+		cin >> match;
+		short result = 0;
+		char nod;
+		while (true)
+		{
+			result = AimedSearch(result,match,choice);
+			if (result == -1)
+			{
+				cout << "未匹配到信息。" << endl;
+				system("pause");
+				return result;
+			}
+			cout << "这是你要找到人吗?(y/n）:";
+			cin >> nod;
+			if (nod == 'y' || nod == 'Y')return result;
+			else result++;
+		}
+	}
+	bool Delete()//删除学生信息
+	{
+		short result;
+		result = Search();
+		if (result == -1)return false;
+		cout << "是否要删除这条信息?(y/n):";
+		char choice;
+		cin >> choice;
+		short idx;
+		//删除下标为i的元素，以下标为i+1的元素覆盖下标为i的元素，并且后面的元素依次覆盖其前一个元素
+		if (choice == 'y' || choice == 'Y')
+		{
+			for (idx = result;idx < size - 1;idx++)
+			{
+				stu[idx] = stu[idx + 1];
+			}
+			size--;//使size递减，使其无法访问原来的数组数量
+			cout << "删除成功！" << endl;
+			system("pause");
+			return true;
+		}
+		cout << "信息未删除" << endl;
+		system("pause");
+		return false;
+	}
+	bool Alter()//修改学生信息
+	{
+		short result;
+		result=Search();
+		if (result == -1)return false;
+		char choice;//接受是否修改
+		char subchoice;//接受修改哪个字段
+		char rename[12];
+		float rescore;
+		cout << "是否要修改这条信息?(y/n)";
+		cin >> choice;
+		if (choice == 'y' || choice == 'Y')
+		{
+			cout << "修改什么:	1.名字	2.数学成绩	3.英语成绩	4.计算机成绩" << endl;
+			cin >> subchoice;
+			switch (subchoice)
+			{
+			case '1':
+				cout << "请输入一个新名字:";cin >> rename;
+				stu[result].SetName(rename);
+				cout << "修改已成功!" << endl;
+				system("pause");
+				break;
+			case '2':
+				cout << "请输入数学成绩：";cin >> rescore;
+				stu[result].SetMath(rescore);break;
+				cout << "修改已成功!" << endl;
+				system("pause");
+				break;
+			case '3':
+				cout << "请输入英语成绩：";cin >> rescore;
+				stu[result].SetEnglish(rescore);break;
+				cout << "修改已成功!" << endl;
+				system("pause");
+				break;
+			case '4':
+				cout << "请输入计算机成绩：";cin >> rescore;
+				stu[result].SetComputer(rescore);break;
+				cout << "修改已成功!" << endl;
+				system("pause");
+				break;
+			default:
+				return false;//加上这个return，若用户先选y，但后来又输入1—4以外的字符，会返回false
+				break;
+			}
+			return true;//default后不加return false的写法造成只要在“是否修改”时选择了y，就一定返回true
+		}
+		cout << "信息未修改!" << endl;
+		system("pause");
+		return false;
+	}
+	void Display()
+	{
+		cout << endl<<setw(12)<<setiosflags(ios::left)<<"姓名"<<setw(12)<<"学号"<<setw(8)<<"数学" << setw(8) << "英语" << setw(8) << "计算机"<<endl;
+		cout << setprecision(1) << setiosflags(ios::fixed);//设置显示的小数位数
+		for (int i = 0;i < size;i++)
+		{
+			cout<<setw(12)<<stu[i].GetName()<< setw(12) << stu[i].GetID()<< setw(8) << stu[i].GetMath()<< setw(8) << stu[i].GetEnglish() << setw(8) << stu[i].GetComputer() << endl;
+		}
+		cout << resetiosflags(ios::left);
+		system("pause");
+	}
+	//实现按不同标准排序
+	void Sort()
+	{
+		char choice;
+		do {
+			cout << "请输入排列方式：1.学号升序	2.总成绩降序";
+			cin >> choice;
+		} while (choice != '1' && choice != '2');
+		if (choice == '1')  sort(&stu[0],&stu[0]+size,Compare1);//一定注意第二个参数的地址要刚好在排序范围之外,Compare1为自定义的比较函数
+		else sort(&stu[0], &stu[0] + size, Compare2);
+		cout << "重新排序完成" << endl;
+		system("pause");
+	}
+	//制作菜单让菜单显示也成为DataBase类的一个成员函数
+	char ShowMenu()
+	{
+		char choice;
+		do {
+			system("cls");//system("cls")作用是清空屏幕显示内容
+			cout << "|---------------------------|" << endl;
+			cout << "|----欢迎使用成绩管理系统-----|" << endl;
+			cout << "|---------1.添加学生---------|" << endl;
+			cout << "|---------2.查找学生---------|" << endl;
+			cout << "|---------3，删除学生--------|" << endl;
+			cout << "|---------4，重新排序--------|" << endl;
+			cout << "|---------5.显示全部---------|" << endl;
+			cout << "|---------6.修改信息---------|" << endl;
+			cout << "|---------7.退出程序---------|" << endl;
+			cout << "|---------------------------|" << endl;
+			cin >> choice;
+		} while (choice<'1'||choice>'7');//数字字符ascii值大小关系，'0'最小，然后'1','2'····
+		return choice;
+	}
+};

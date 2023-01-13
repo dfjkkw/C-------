@@ -1,0 +1,14 @@
+//实现按不同标准排序
+#include<algorithm>//sort()函数
+	void Sort()
+	{
+		char choice;
+		do {
+			cout << "请输入排列方式：1.学号升序	2.总成绩降序";
+			cin >> choice;
+		} while (choice != '1' && choice != '2');
+		if (choice == '1')  sort(&stu[0],&stu[0]+size,Compare1);//一定注意第二个参数的地址要刚好在排序范围之外,Compare1为自定义的比较函数
+		else sort(&stu[0], &stu[0] + size, Compare2);
+		cout << "重新排序完成" << endl;
+		system("pause");
+	}
