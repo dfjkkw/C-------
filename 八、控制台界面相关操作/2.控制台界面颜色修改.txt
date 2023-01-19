@@ -1,0 +1,36 @@
+//控制台界面颜色修改
+/*
+文字前景色：
+FOREGROUND_RED 红
+FOREGROUND_GREEN  绿
+FOREGROUND_BLUE  蓝
+FOREGROUND_RED|FOREGROUND_GREEN 黄
+FOREGROUND_RED|FOREGROUND_BLUE 紫红
+FOREGROUND_GREEN|FOREGROUND_BLUE  淡蓝
+0  黑
+FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE 白
+文字背景色
+BACKGROUND_```
+*/
+#pragma warning(disable:4996)//解决VS C4996错误
+#include<iostream>
+#include<windows.h>
+using namespace std;
+int main()
+{
+	//0=黑色，1=蓝色，2=绿色，3=湖蓝色，4=红色，5=紫色，6=黄色，7=白色，8=灰色，9=淡蓝色
+	// A=淡绿色，B=淡浅绿色，C=淡红色，D=淡紫色，E=淡黄色，F=亮白色
+	//system("color 0E");//0代表背景色为黑色，E代表输出的字为黄色
+	//system("color 1E");//0代表背景色为蓝色，E代表输出的字为黄色
+	//cout << "我要自学网" << endl;
+	//system("color fo");//进入程序演示会看到前景后景的颜色代码
+	system("color 14");
+	HANDLE h;
+	h = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(h, FOREGROUND_GREEN|BACKGROUND_RED);
+	cout << "我要自学网" << endl;
+	//设置颜色时不同常数值之间用“位或”运算
+	SetConsoleTextAttribute(h, FOREGROUND_RED| FOREGROUND_GREEN | BACKGROUND_BLUE);
+	cout << "欢迎来学习" << endl;
+	return 0;
+}

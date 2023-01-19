@@ -1,0 +1,43 @@
+//控制台界面输出坐标控制
+#pragma warning(disable:4996)//解决VS C4996错误
+#include<iostream>
+#include<windows.h>
+#include<time.h>
+#include<conio.h>//定义getch头文件
+using namespace std;
+void SetOutPutPosition(int x, int y)
+{
+	//在第X行第Y列输出
+	HANDLE h;
+	h = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD pos;
+	pos.X=x; pos.Y=y;
+	SetConsoleCursorPosition(h, pos);
+}
+int main()
+{
+	//在第X行第Y列输出
+	//HANDLE h;
+	//h = GetStdHandle(STD_OUTPUT_HANDLE);
+	//COORD pos;
+	//cout << "X:";cin >> pos.X;
+	//cout << "Y:";cin >> pos.Y;
+	//SetConsoleCursorPosition(h, pos);
+	//cout << "在新位置输出句子" << endl;
+	srand(time(0));
+	int x=0, y=0;
+	char c;
+	while (true)
+	{
+		SetOutPutPosition(x, y);
+		cout << "                      ";//输出空字串是为了擦掉先前的输出内容
+		x = rand() % 40;
+		y = rand() % 18;
+		SetOutPutPosition(x, y);
+		cout << "欢迎访问“我要自学网”";
+		c = getch();//getch()函数会让程序阻塞，等待用户的按键行为再继续，具体的按键会成为函数的返回值
+	    //如果getch()时按下的空格键，返回值为虚拟键码VK_SPACE
+		if (c == VK_SPACE) break;//将空格键设为离开循环条件
+	}
+	return 0;
+}

@@ -1,0 +1,37 @@
+//控制台界面尺寸修改
+#pragma warning(disable:4996)//解决VS C4996错误
+#include<iostream>
+#include<windows.h>
+#include<conio.h>
+using namespace std;
+void SetOutPutPosition(int x, int y)//设定输出坐标
+{
+	HANDLE handle_out;//定义句柄用于获得输出设备句柄
+	COORD crd;
+	crd.X = x; crd.Y = y;
+	handle_out = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorPosition(handle_out, crd);
+}
+void GetConsoleSize(short* cols, short* lines)
+{
+	HANDLE h;
+	h = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	GetConsoleScreenBufferInfo(h,&csbi);//获取控制台屏幕缓冲区信息
+	*cols = csbi.dwSize.X;
+	*lines = csbi.dwSize.Y;
+}
+int main()
+{
+	system("mode con cols=40 lines=20");
+	short cols, lines;
+	GetConsoleSize(&cols, &lines);
+	cout << "列数：" << cols << "\t行数：" << lines << endl;
+	char c;
+	do {
+		SetOutPutPosition(rand() % cols, rand() % lines);
+		cout << (char)('A' + rand() % 26);
+		c = getch();
+	} while (c!='q');
+	return 0;
+}

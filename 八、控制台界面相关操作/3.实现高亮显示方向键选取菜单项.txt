@@ -1,0 +1,58 @@
+//实现高亮显示方向键选取菜单项
+#pragma warning(disable:4996)//解决VS C4996错误
+#include<iostream>
+#include<windows.h>
+#include<conio.h>
+using namespace std;
+void SetOutPutPosition(int x, int y)//设定输出坐标
+{
+	HANDLE handle_out;//定义句柄用于获得输出设备句柄
+	COORD crd;
+	crd.X = x; crd.Y = y;
+	handle_out = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleCursorPosition(handle_out, crd);
+}
+int main()
+{
+	SetOutPutPosition(20,5);
+	HANDLE h;
+	h = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(h, FOREGROUND_RED|FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cout << "假如有妹子向你表白怎么办？" << endl;
+	int choice=1;
+	char c=0;//用于接受getch()
+	while (1)
+	{
+		if (c == 77)//按下了右方向键
+		{
+			choice = choice % 3 + 1;
+		}
+		if (c == 75)//按下了左方向键
+		{
+			choice = (choice == 1 ? 3 : choice - 1);
+		}
+		if (c == VK_RETURN) break;//表明做出了选择，离开了循环体
+		//此时要实现仅让当前被选中的选项拥有白色背景
+		SetOutPutPosition(14, 7);
+		if (choice == 1)
+			SetConsoleTextAttribute(h, FOREGROUND_RED|FOREGROUND_BLUE | FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN);
+		cout << "接受她";
+		//输出一项之后又通过SetConsoleTextAttribute()将背景色取消掉
+		SetConsoleTextAttribute(h, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+		SetOutPutPosition(24, 7);
+		if (choice == 2)
+			SetConsoleTextAttribute(h, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN);
+		cout << "拒绝她" ;
+		SetConsoleTextAttribute(h, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+		SetOutPutPosition(34, 7);
+		if (choice == 3)
+			SetConsoleTextAttribute(h, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_BLUE | BACKGROUND_GREEN);
+		cout << "观察一段时间";
+		SetConsoleTextAttribute(h, FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+		c=getch();
+		if(c==0)c = getch();
+	}
+	SetConsoleTextAttribute(h, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	cout << "\n\n你做出了正确的选择。" << endl;
+	return 0;
+}
