@@ -1,0 +1,45 @@
+//用模板定义节点
+//先去掉Teacher类中的previous和next指针
+#include<iostream>
+using namespace std;
+struct Teacher {//用结构体描述教师信息
+	char name[9];//教师姓名
+	char title[7];//教师职称
+
+	Teacher()//建立一个无参构造函数
+	{
+		strcpy_s(name, "匿名");
+		strcpy_s(title, "无");
+	}
+	Teacher(char* _name, char* _title)
+	{
+		strcpy_s(name, _name);
+		strcpy_s(title, _title);
+	}
+};
+ostream &operator<<(ostream& os, Teacher& t)
+{
+	//因为name和title都是公有成员，故不需要建立友元关系
+	os << t.name << '\t' << t.title << endl;
+	return os;
+}
+template<typename T>//模板的使用：templat为关键字，typename T为数据类型
+struct Node {
+	T t;//变量t即是由模板指定数据类型
+	Node* previous;//指向上一节点
+	Node* next;//指向下一节点
+	Node(T _t)
+	{
+		t = _t;
+		previous = next = NULL;
+	}
+};
+int main()
+{
+	Teacher a("张三", "助教");
+	cout << a;
+	//链表中的节点都是使用new语句申请内存空间，这样才能在清除链表时用delete语句逐个清除节点
+	Node<Teacher> *node=new Node<Teacher>(a);
+
+	return 0;
+}

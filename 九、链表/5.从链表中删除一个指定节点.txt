@@ -1,0 +1,113 @@
+//从链表中删除一个指定节点
+#include<iostream>
+using namespace std;
+struct Teacher {//用结构体描述教师信息
+	char name[9];//教师姓名
+	char title[7];//教师职称
+	Teacher* previous;//指向前一元素
+	Teacher* next;//指向后一元素
+	Teacher()//建立一个无参构造函数
+	{
+		strcpy_s(name, "匿名");
+		strcpy_s(title, "无");
+		previous = next = NULL;
+	}
+	Teacher(char* _name, char* _title)
+	{
+		strcpy_s(name, _name);
+		strcpy_s(title, _title);
+		previous = next = NULL;
+	}
+};
+//第一个参数是想要赋值的节点,第二第三个参数分别传入姓名和职称的字符串,第四、五个参数是previous,next
+bool GetInfo(Teacher* t, char* _name, char* _title, Teacher* previous_t = NULL, Teacher* next_t = NULL)
+{
+	if (t == NULL)return false;
+	strcpy_s(t->name, _name);
+	strcpy_s(t->title, _title);
+	t->previous = previous_t;
+	t->next = next_t;
+	return true;
+}
+//参数传入链表的头节点和目前想要添加的节点
+void Append(Teacher* _head, Teacher* _app)
+{
+	Teacher* tmp = _head;
+	while (tmp->next != NULL) tmp = tmp->next;
+	tmp->next = _app;
+	_app->previous = tmp;
+}
+//遍历,显示链表
+//flag为false，从头节点开始正向输出，flag为true，从尾节点开始逆向输出
+void DisplayList(Teacher* _head, bool flag = false)
+{
+	Teacher* tmp = _head;
+	if (flag)
+	{
+		while (tmp->next != NULL)tmp = tmp->next;
+		while (tmp != NULL)
+		{
+			cout << tmp->name << "\t" << tmp->title << endl;
+			tmp = tmp->previous;
+		}
+	}
+	else {
+		while (tmp != NULL)
+		{
+			cout << tmp->name << "\t" << tmp->title << endl;
+			tmp = tmp->next;
+		}
+	}
+}
+//删除节点
+void Erase(Teacher* _head)
+{
+	Teacher* tmp;
+	while (_head != NULL)
+	{
+		tmp = _head;
+		_head = _head->next;
+		delete tmp;
+	}
+}
+//删除节点
+bool Delete(Teacher*& _head, char* _name)
+{
+	Teacher* tmp = _head;
+	while (strcmp(tmp->name, _name) != 0)
+	{
+		tmp = tmp->next;
+		if (tmp == NULL)return false;
+	}
+	//正好是头节点需要删除
+	if (tmp->previous == NULL)//验证tmp是否为头节点
+	{
+		_head = _head->next;
+		_head->previous = NULL;
+		delete tmp;
+		return true;
+	}
+	tmp->previous->next = tmp->next;
+	if(tmp->next!=NULL)//若不是尾节点
+		tmp->next->previous = tmp->previous;
+	delete tmp;
+	return true;
+}
+int main()
+{
+	Teacher* head = NULL;//头指针
+	Teacher* tmp = NULL;//临时指针
+	head = new Teacher;
+	GetInfo(head, "何云", "教授");
+	tmp = new Teacher;
+	GetInfo(tmp, "王琦", "副教授");
+	Append(head, tmp);
+	tmp = new Teacher;
+	GetInfo(tmp, "李华", "讲师");
+	Append(head, tmp);
+	DisplayList(head);
+	Delete(head, "李华");
+	DisplayList(head);
+	Erase(head);
+	return 0;
+}

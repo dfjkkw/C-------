@@ -1,0 +1,61 @@
+//添加节点，显示链表和删除节点
+#include<iostream>
+using namespace std;
+struct Teacher {//用结构体描述教师信息
+	char name[9];//教师姓名
+	char title[7];//教师职称
+	Teacher* next;//指向下一个节点
+};
+//第一个参数是想要赋值的节点,第二第三个参数分别传入姓名和职称的字符串,第四个参数是next
+bool GetInfo(Teacher* t, char* _name, char* _title, Teacher* next_t = NULL)
+{
+	if (t == NULL)return false;
+	strcpy_s(t->name, _name);
+	strcpy_s(t->title, _title);
+	t->next = next_t;
+	return true;
+}
+//参数传入链表的头节点和目前想要添加的节点
+void Append(Teacher* _head, Teacher* _app)
+{
+	Teacher*tmp=_head;
+	while (tmp->next!=NULL) tmp = tmp->next;
+	tmp->next = _app;
+}
+//遍历,显示链表
+void DisplayList(Teacher* _head)
+{
+	Teacher* tmp = _head;
+	while (tmp != NULL)
+	{
+		cout << tmp->name << "\t" << tmp->title << endl;
+		tmp = tmp->next;
+	}
+}
+//删除节点
+void Erase(Teacher* _head)
+{
+	Teacher* tmp;
+	while (_head != NULL)
+	{
+		tmp = _head;
+		_head = _head->next;
+		delete tmp;
+	}
+}
+int main()
+{
+	Teacher* head = NULL;//头指针
+	Teacher* tmp = NULL;//临时指针
+	head = new Teacher;
+	GetInfo(head, "何云", "教授");
+	tmp = new Teacher;
+	GetInfo(tmp, "王琦", "副教授");
+	Append(head, tmp);
+	tmp = new Teacher;
+	GetInfo(tmp, "李华", "讲师");
+	Append(head, tmp);
+	DisplayList(head);
+	Erase(head);
+	return 0;
+}

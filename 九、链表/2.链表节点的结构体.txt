@@ -1,0 +1,32 @@
+//链表节点的结构体
+#include<iostream>
+using namespace std;
+struct Teacher {//用结构体描述教师信息
+	char name[9];//教师姓名
+	char title[7];//教师职称
+	Teacher* next;//指向下一个节点
+};
+//第一个参数是想要赋值的节点,第二第三个参数分别传入姓名和职称的字符串,第四个参数是next
+bool GetInfo(Teacher* t,char *_name,char *_title,Teacher *next_t=NULL)
+{
+	if (t == NULL)return false;
+	strcpy_s(t->name, _name);
+	strcpy_s(t->title, _title);
+	t->next = next_t;
+	return true;
+}
+//参数传入链表的头节点和目前想要添加的节点
+void Append(Teacher* _head, Teacher* _app)
+{
+	_head->next = _app;
+}
+int main()
+{
+	Teacher* head = NULL;//头指针
+	Teacher* tmp = NULL;//临时指针
+	head = new Teacher;
+	GetInfo(head, "何云", "教授");
+	tmp = new Teacher;
+	GetInfo(tmp, "王琦", "副教授");
+	return 0;
+}
