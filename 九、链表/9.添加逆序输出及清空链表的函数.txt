@@ -1,0 +1,160 @@
+//添加逆序输出及清空链表的函数
+#include<iostream>
+using namespace std;
+struct Teacher {//用结构体描述教师信息
+	char name[9];//教师姓名
+	char title[7];//教师职称
+
+	Teacher()//建立一个无参构造函数
+	{
+		strcpy_s(name, "匿名");
+		strcpy_s(title, "无");
+	}
+	Teacher(char* _name, char* _title)
+	{
+		strcpy_s(name, _name);
+		strcpy_s(title, _title);
+	}
+};
+ostream& operator<<(ostream& os, Teacher& t)
+{
+	//因为name和title都是公有成员，故不需要建立友元关系
+	os << t.name << '\t' << t.title << endl;
+	return os;
+}
+template<typename T>//模板的使用：templat为关键字，typename T为数据类型
+struct Node {
+	T t;//变量t即是由模板指定数据类型
+	Node* previous;//指向上一节点
+	Node* next;//指向下一节点
+	Node(T _t)
+	{
+		t = _t;
+		previous = next = NULL;
+	}
+};
+template<typename T>
+ostream& operator<<(ostream& os, Node<T>& node)
+{
+	os << node.t;
+	return os;
+}
+template<typename T>
+class List {
+private:
+	//head<=>tail 为空链表
+	//head<=>元素1<=>tail 拥有一个节点的链表
+	Node<T>* head;//头哨兵
+	Node<T>* tail;//尾哨兵
+	short size;//元素个数
+public:
+	List()
+	{
+		head = new Node<T>(Teacher());
+		tail = new Node<T>(Teacher());
+		head->next = tail;
+		tail->previous = head;
+		head->previous = NULL;
+		tail->next = NULL;
+		size = 0;
+	}
+	//插入尾节点
+	void InsertAsLast(Node<T>* node)
+	{
+		node->previous = tail->previous;
+		node->next = tail;
+		node->previous->next = node;
+		tail->previous = node;
+		size++;
+	}
+	//插入尾节点重载
+	void InsertAsLast(Teacher t)
+	{
+		Node<T>* node = new Node<T>(t);
+		node->previous = tail->previous;
+		node->next = tail;
+		node->previous->next = node;
+		tail->previous = node;
+		size++;
+	}
+    //在头节点插入
+	void InsertAsFirst(Node<T>* node)
+	{
+		//在链表头部插入节点，就是在头哨兵和原来的第一节点之间插入新节点
+		node->previous = head;
+		node->next = head->next;
+		head->next = node;
+		node->next->previous = node;
+		size++;
+	}
+	//头节点插入重载
+	void InsertAsFirst(Teacher t)
+	{
+		Node<T>* node = new Node<T>(t);
+		node->previous = head;
+		node->next = head->next;
+		head->next = node;
+		node->next->previous = node;
+		size++;
+	}
+	//遍历
+	void Display()
+	{
+		Node<T>* tmp_node = head->next;
+		while (tmp_node != tail)
+		{
+			cout << *tmp_node;
+			tmp_node = tmp_node->next;
+		}
+	}
+	//逆序输出
+	void DisplayBackward()
+	{
+		Node<T>* tmp_node = tail->previous;
+		while (tmp_node != head)
+		{
+			cout << *tmp_node;
+			tmp_node = tmp_node->previous;
+		}
+	}
+	short Size() {return size;}
+	//清空链表
+	void ClearList()
+	{
+		//步骤：tmp_node和_tmp_node先指向同一节点，然后tmp_node先向后移动到下一节点,_tmp_node留在原地
+		//并释放该结点，然后_tmp_node与tmp_node指向同一节点
+		Node<T>* tmp_node = head->next;
+		Node<T>* _tmp_node = tmp_node;
+		while (tmp_node != tail)
+		{
+			tmp_node = tmp_node->next;
+			delete _tmp_node;
+			_tmp_node = tmp_node;
+		}
+		size = 0;
+		//空节点时，尾哨兵的previous指针应该指向头哨兵
+		head->next = tail;
+		tail->previous = head;
+	}
+};
+int main()
+{
+	Teacher a("张三", "助教");
+	//链表中的节点都是使用new语句申请内存空间，这样才能在清除链表时用delete语句逐个清除节点
+	Node<Teacher>* node = new Node<Teacher>(a);
+	List < Teacher>l;
+	l.InsertAsLast(node);
+	Teacher b("李四", "教授");
+	l.InsertAsLast(b);
+	l.InsertAsLast(Teacher("王五", "副教授"));//此处参数是传值，不是引用
+	//提示Teacher类型不能转换成<T>*类型，表明函数重载未成功
+	l.InsertAsFirst(Teacher("王琦","讲师"));
+	l.Display();
+	cout << "逆序输出" << endl;
+	l.DisplayBackward();
+	l.ClearList();
+	cout << "链表已清空" << endl;
+	l.Display();//检测能否清空
+	cout << "此时有" << l.Size() << "个元素" << endl;
+	return 0;
+}
