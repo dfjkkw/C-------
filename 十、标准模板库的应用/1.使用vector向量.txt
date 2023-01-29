@@ -1,0 +1,40 @@
+//使用vector向量
+/*
+c++标准模板库
+在程序开发过程中，有的数据结构开发范围非常广，如向量，栈，队列等，甚至在大多数应用程序中都会用到。如果
+每一次需要用到某一种数据结构都靠程序员自己开发的话，会花掉大量的人力成本。c++标准模板库为我们提供了很
+多成熟的常用数据结构，使我们省去了大量的工作。
+
+向量是一种线性的保存数据的结构，它的每一个存储单元在内存中的物理地址也是呈线性排列，与数组差不多，可以
+理解为一种经过封装的数组。通过动态重新申请内存空间，向量能够保存的元素个数是灵活的。
+
+向量的保存数据类型是在建立向量的时候才予以定夺。
+
+int array[10];//只能保存10个数的数组
+动态申请内存空间：
+int *array;
+array=new int[10];
+int *tmp;
+tmp=array;
+array=new int [20];//从保存10个元素变为保存20个元素
+delete tmp;
+
+链表
+//使用模板用来保存不同的数据类型
+template<typename T>
+List<char>list
+*/
+#include<iostream>
+#include<vector>
+using namespace std;
+int main()
+{
+	vector<int>shuzi;//int型的向量名字为shuzi
+	for(int i=0;i<10;i++)shuzi.push_back(i * i);//保存10个数,i从0开始
+	for (int i = 0;i < shuzi.size();i++)cout << shuzi[i] << '\t';//shuzi.size()为向量中的元素个数
+	cout << endl;
+	shuzi.pop_back();//删除向量尾部的数
+	for (int i = 0;i < shuzi.size();i++)cout << shuzi[i] << '\t';
+	cout << endl;
+	return 0;
+}
