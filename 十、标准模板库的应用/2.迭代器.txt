@@ -1,0 +1,30 @@
+//迭代器
+#include<iostream>
+#include<vector>
+#include<algorithm>//使用sort函数要先使用algorithm头函数
+#include<time.h>
+using namespace std;
+int main(void)
+{
+	vector<int>shuzi;
+	srand(time(0));//获得随机种子
+	for (int i = 0;i < 10;i++)shuzi.push_back(rand() % 20);
+	for (int i = 0;i < shuzi.size();i++)
+		cout << shuzi[i] << '\t';
+	cout << endl;
+	//迭代器：一种经过封装的指针
+	//建立一个迭代器
+	vector<int>::iterator it;//it为迭代器名字
+	cout << "用迭代器遍历访问" << endl;
+	//和指针一样，迭代器若自加，会移向内存中的下一地址
+	for (it = shuzi.begin();it != shuzi.end();it++)
+		cout << *it << '\t';
+	cout << endl;
+	//尝试用sort函数对向量重新排序
+	cout << "排序后" << endl;
+	sort(shuzi.begin(),shuzi.end());
+	for (it = shuzi.begin();it != shuzi.end();it++)
+		cout << *it << '\t';
+	cout << endl;
+	return 0;
+}
