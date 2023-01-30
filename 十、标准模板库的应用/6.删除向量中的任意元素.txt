@@ -1,0 +1,32 @@
+//删除向量中的任意元素
+#include<iostream>
+#include<vector>
+#include<time.h>
+using namespace std;
+int main(void)
+{
+	vector<int>shuzi;
+	srand(time(0));//获得随机种子
+	for (int i = 0;i < 10;i++)shuzi.push_back(rand() % 20);//往尾部添加新元素
+	//迭代器：一种经过封装的指针
+	//建立一个迭代器
+	vector<int>::iterator it;//it为迭代器名字
+	cout << "用迭代器遍历访问" << endl;
+	//和指针一样，迭代器若自加，会移向内存中的下一地址
+	for (it = shuzi.begin();it != shuzi.end();it++)
+		cout << *it << '\t';
+	cout << endl;
+	//注：不是每次循环都要让迭代器自加，只有不执行删除操作时才自加
+	for (it = shuzi.begin();it != shuzi.end();)
+		if (*it % 2 == 0)//判断是否为偶数
+			//后面的元素会依次向前挪动
+			//shuzi.erase(it++);//删除迭代器指向的元素
+			it=shuzi.erase(it);//有返回值
+		else
+			it++;
+	cout << "删除所有偶数之后输出为" << endl;
+	for (it = shuzi.begin();it != shuzi.end();it++)
+		cout << *it << '\t';
+	cout << endl;
+	return 0;
+}

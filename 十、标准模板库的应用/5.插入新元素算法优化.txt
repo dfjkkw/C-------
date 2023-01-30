@@ -1,0 +1,81 @@
+//插入新元素算法优化
+#include<iostream>
+#include<vector>
+#include<algorithm>//使用sort函数要先使用algorithm头函数
+#include<time.h>
+using namespace std;
+//编写一个往有序向量中添加元素的函数
+void InsertToVector(vector<int>&v,int n)
+{
+	vector<int>::iterator it;
+	for (it = v.begin();it != v.end();it++)
+	{
+		if (*it > n)
+		{
+			v.insert(it, n);break;
+		}
+	}
+}
+void InsertToVector2(vector<int>&v,int n)
+{
+	vector<int>::iterator low = v.begin();
+	vector<int>::iterator mid = v.begin() + v.size() / 2;
+	vector<int>::iterator high = v.end() - 1;
+	//while循环每一次都用low~high范围内最中间的元素和n作比较
+	//每经过一次迭代low~high的范围在上一次的基础上缩小一半
+	while (high - low > 0)
+	{
+		if (*mid > n) 
+		{
+			high = (mid==high?high-1:mid);
+			mid =low + ( high-low) / 2;
+		}
+		else
+		{
+			low = (mid==low?low+1:mid);
+			mid = low + (high - low) / 2;
+		}
+	}
+	//将n插入low的地址，该地址原来的值会被自动“挤”到后面去
+	if (*low > n)v.insert(low, n);
+	else v.insert(low+1, n);
+}
+int main(void)
+{
+	vector<int>shuzi;
+	srand(time(0));//获得随机种子
+	for (int i = 0;i < 10;i++)shuzi.push_back(rand() % 20);//往尾部添加新元素
+	//迭代器：一种经过封装的指针
+	//建立一个迭代器
+	vector<int>::iterator it;//it为迭代器名字
+	cout << "用迭代器遍历访问" << endl;
+	//和指针一样，迭代器若自加，会移向内存中的下一地址
+	for (it = shuzi.begin();it != shuzi.end();it++)
+		cout << *it << '\t';
+	cout << endl;
+	//尝试用sort函数对向量重新排序
+	cout << "排序后" << endl;
+	sort(shuzi.begin(),shuzi.end());
+	for (it = shuzi.begin();it != shuzi.end();it++)
+		cout << *it << '\t';
+	cout << endl;
+	// 往向量中部插入元素
+	//新插入的元素会出现在第一个参数迭代器所指向的位置，该位置原来的元素及其后面的元素会依次后移
+	//shuzi.insert(it, 3);//添加新元素3
+	cout << "添加新元素" << endl;
+	cout << "新添加一个数：" ;
+	int m;
+	cin >> m;
+	InsertToVector(shuzi, m);
+	for (it = shuzi.begin();it != shuzi.end();it++)
+		cout << *it << '\t';
+	cout << endl;
+	cout << "添加新元素" << endl;
+	cout << "新添加一个数：";
+	cin >> m;
+	InsertToVector2(shuzi, m);
+	for (it = shuzi.begin();it != shuzi.end();it++)
+		cout << *it << '\t';
+	cout << endl;
+	return 0;
+}

@@ -1,0 +1,48 @@
+//全排列
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<time.h>
+using namespace std;
+int main(void)
+{
+	vector<int>shuzi;
+	srand(time(0));//获得随机种子
+	for (int i = 0;i < 5;i++)shuzi.push_back(rand() % 20);//往尾部添加新元素
+	//迭代器：一种经过封装的指针
+	//建立一个迭代器
+	vector<int>::iterator it;//it为迭代器名字
+	cout << "用迭代器遍历访问" << endl;
+	//和指针一样，迭代器若自加，会移向内存中的下一地址
+	for (it = shuzi.begin();it != shuzi.end();it++)
+		cout << *it << '\t';
+	cout << endl;
+	sort(shuzi.begin(), shuzi.end());
+	do {
+		for (it = shuzi.begin();it != shuzi.end();it++)
+			cout << *it << '\t';
+		cout << endl;
+	} while (next_permutation(shuzi.begin(), shuzi.end()));//最终为降序排列
+	//例子
+	cout << "有甲、乙、丙、丁四个犯罪成员的团伙被警察抓获并盘问。\n\n";
+	cout << "甲：丙是我们的头目，一切是他指挥。"<<endl;
+	cout << "乙：我不是头目。" << endl;
+	cout << "丙：我不是头目。" << endl;
+	cout << "丁：甲说得对。\n" << endl;
+	cout << "如果四人中只有一个说了真话，请问谁是头目？" << endl;
+	bool head[4] = { false,false,false,true };
+	int correct;
+	do {
+		correct = 0;//说真话的数量
+		if (head[2])correct += 3;//丙是头目，甲与乙和丁说的都是真话
+		if (!head[1])correct++;//乙说的真话
+		if (!head[2])correct++;//丙说的真话
+		if (correct == 1)break;
+	} while (next_permutation(head, head+4));
+	//注：对数组进行全排列时，next_permutation函数参数的写法，先是数组名，再是数组名加上数组长度
+	if (head[0])cout << "甲是头目" << endl;
+	if (head[1])cout << "乙是头目" << endl;
+	if (head[2])cout << "丙是头目" << endl;
+	if (head[3])cout << "丁是头目" << endl;
+	return 0;
+}
