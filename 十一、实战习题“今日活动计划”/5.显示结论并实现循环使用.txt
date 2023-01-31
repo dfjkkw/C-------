@@ -1,0 +1,80 @@
+class RandomChoice {
+private:
+	char option[6][20];
+	short size;
+	HANDLE handle_out;
+	COORD crd;//坐标
+	short pointer;//保存当前箭头指向选项的下标
+	short delay;//箭头切换位置的延时时间
+public:
+	RandomChoice(char* option1, char* option2, char* option3 = NULL, char* option4 = NULL, char* option5 = NULL, char* option6 = NULL)
+	{
+		pointer = 0;
+		strcpy_s(option[0], option1);
+		strcpy_s(option[1], option2);
+		size = 2;
+		handle_out = GetStdHandle(STD_OUTPUT_HANDLE);
+		crd.X = 5;
+		crd.Y = 4+(pointer<<1);//4是因为有4个换行符,向左位移一即等于乘以2
+		if (option3 != NULL)
+		{
+			strcpy_s(option[2], option3);
+			size++;
+		}
+		else return;
+		if (option4 != NULL)
+		{
+			strcpy_s(option[3], option4);
+			size++;
+		}
+		else return;
+		if (option5 != NULL)
+		{
+			strcpy_s(option[4], option5);
+			size++;
+		}
+		else return;
+		if (option6 != NULL)
+		{
+			strcpy_s(option[5], option6);
+			size++;
+		}
+		else return;
+	}
+	// 输出选项
+	void Start() {
+		cout << "\n你今天的活动安排是什么？来做个选择吧。\n\n\n";
+		for (short i = 0;i < size;i++)
+		{
+			cout << "        " << option[i] << endl << endl;
+		}
+	}
+	//更新箭头的显示位置
+	void Refresh()
+	{
+		SetConsoleCursorPosition(handle_out,crd);//将输出坐标定位在上一次显示箭头的位置
+		cout << "  ";//擦除掉上一次输出的箭头
+		pointer = (pointer + 1) % size;//让pointer的值在0~size-1之间循环
+		crd.Y = 4 + (pointer << 1);
+		SetConsoleCursorPosition(handle_out,crd);//将输出坐标设定在新的位置
+		cout << "->";
+	}
+	short SetDelay(short d) { return delay = d; }
+	void Wait() { Sleep(delay); }
+	short Play()
+	{
+		while (!_kbhit())//getch()
+		{
+			Refresh();//擦掉上一次画的箭头，并在新的位置画出箭头，更新pointer的值
+			Wait();
+		}
+		return pointer;
+	}
+	//显示结论并实现循环使用
+	void ShowResult()
+	{
+		crd.Y = 18;//改变纵坐标
+		SetConsoleCursorPosition(handle_out, crd);
+		cout << "今天就" << option[pointer] << "吧。这是天意啊！"<<endl<<endl;
+	}
+};
