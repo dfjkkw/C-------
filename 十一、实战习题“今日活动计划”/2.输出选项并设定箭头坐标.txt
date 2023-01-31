@@ -1,0 +1,50 @@
+// 输出选项并设定箭头坐标
+class RandomChoice {
+private:
+	char option[6][20];
+	short size;
+	HANDLE handle_out;
+	COORD crd;//坐标
+public:
+	RandomChoice(char* option1, char* option2, char* option3 = NULL, char* option4 = NULL, char* option5 = NULL, char* option6 = NULL)
+	{
+		strcpy_s(option[0], option1);
+		strcpy_s(option[1], option2);
+		size = 2;
+		handle_out = GetStdHandle(STD_OUTPUT_HANDLE);
+		crd.X = 5;
+		crd.Y = 5;
+		if (option3 != NULL)
+		{
+			strcpy_s(option[2], option3);
+			size++;
+		}
+		else return;
+		if (option4 != NULL)
+		{
+			strcpy_s(option[3], option4);
+			size++;
+		}
+		else return;
+		if (option5 != NULL)
+		{
+			strcpy_s(option[4], option5);
+			size++;
+		}
+		else return;
+		if (option6 != NULL)
+		{
+			strcpy_s(option[5], option6);
+			size++;
+		}
+		else return;
+	}
+	// 输出选项
+	void Start() {
+		cout << "\n你今天的活动安排是什么？来做个选择吧。\n\n\n";
+		for (short i = 0;i < size;i++)
+		{
+			cout << "            " << option[i] << endl << endl;
+		}
+	}
+};

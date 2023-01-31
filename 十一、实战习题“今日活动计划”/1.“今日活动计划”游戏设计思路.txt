@@ -1,0 +1,38 @@
+//“今日活动计划”游戏设计思路
+class RandomChoice {
+private:
+	char option[6][20];
+	short size;
+public:
+	RandomChoice(char* option1, char* option2, char* option3 = NULL, char* option4 = NULL, char* option5 = NULL, char* option6 = NULL)
+	{
+		strcpy(option[0], option1);
+		strcpy(option[1], option2);
+		size = 2;
+		if (option3 != NULL)
+		{
+			strcpy(option[2], option3);
+			size++;
+		}
+		else return;
+		if (option4 != NULL)
+		{
+			strcpy(option[3], option4);
+			size++;
+		}
+		else return;
+		if (option5 != NULL)
+		{
+			strcpy(option[4], option5);
+			size++;
+		}
+		else return;
+		if (option6 != NULL)
+		{
+			strcpy(option[5], option6);
+			size++;
+		}
+		else return;
+
+	}
+};
