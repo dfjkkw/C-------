@@ -1,0 +1,75 @@
+class LetterShower
+{
+private:
+	//建立26个成员的向量数组，下标为0的保存字母A的出现，下落情况，下标25的保存Z的各种情况
+	vector<Letter>letters[26];
+	short score;//保存玩家得分
+	//判断一个字母已掉落到地面
+	bool Ground(Letter l)
+	{
+		return l.y >= GROUND;//落地为真，不落地为假
+	}
+public:
+	LetterShower(){score = 0;}
+	//新产生一个字母并进入向量
+	void GenerateLetter() {
+		Letter l = { 'A'+rand() % 26,rand()%SCR_WIDTH,1};//会进行ASCII码相加
+		letters[l.letter - 'A'].push_back(l);
+	}
+	//管理字母的掉落、触地
+	short Fall()
+	{
+		short i;
+		vector<Letter>::iterator itr;
+		//外层循环是字母A~Z的遍历，遍历下标为0~25的向量
+		for (i = 0;i < 26;i++)
+		{
+			//若同一字母现后出现在屏幕上不同位置，靠内层循环依次处理
+			for (itr = letters[i].begin();itr != letters[i].end();)
+			{
+				//获得字母原来的位置坐标，准备输出空格将其擦除
+				crd.X = itr->x;
+				crd.Y = itr->y;
+				SetConsoleCursorPosition(handle, crd);
+				cout << ' ';
+				if (Ground(*itr))//若字母已落地，则需要处理扣血
+				{
+					if (vty.GetWoud()<=0)//处理Game Over的输出信息
+					{
+						crd.X = 13;
+						crd.Y = GROUND + 2;
+						SetConsoleCursorPosition(handle, crd);
+						SetConsoleTextAttribute(handle, BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
+						cout << "GAME OVER!";
+						SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+						PlaySound(".\\sound\\over.wav",NULL,SND_ASYNC|SND_FILENAME);
+						return -1;//返回-1告知本函数的调用块游戏已结束
+					}
+					letters[i].erase(itr);//将落地的字母从向量当中清除掉
+					PlaySound(".\\sound\\wound.wav", NULL,SND_ASYNC | SND_FILENAME);
+					continue;
+				}
+				itr->y++;
+				crd.Y=itr->y;
+				SetConsoleCursorPosition(handle, crd);
+				cout << itr->letter;
+				itr++;
+			}
+		}
+		return 0;//返回0表明尚未GAME OVER
+	}
+	// 显示得分的函数
+	void ClearAll()
+	{
+		for (short i = 0;i < 26;i++)
+			while (!letters[i].empty())letters[i].pop_back();
+		score = 0;
+	}
+	void ShowScore()
+	{
+		crd.X = 0;
+		crd.Y = GROUND + 2;
+		SetConsoleCursorPosition(handle, crd);
+		cout << "Score：" << score << " ";
+	}
+};

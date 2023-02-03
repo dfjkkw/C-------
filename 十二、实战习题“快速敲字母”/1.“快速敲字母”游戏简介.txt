@@ -1,0 +1,30 @@
+//“快速敲字母”游戏简介
+/*
+“快速敲字母”游戏简要说明：游戏开始运行之后会不断有英文字母从窗体顶部出现并且往下掉
+落。玩家通过按下键盘上相对应的字母键，可以将正在掉落的字母消除掉，如果任由字母掉到窗
+体下方所绘制的“地面”上，玩家会受到“伤害”，受伤次数到5次则会结束游戏。
+*/
+#include<windows.h>
+#include<iostream>
+using namespace std;
+HANDLE handle;//获得输出设备句柄
+COORD crd;//用于设置输出坐标
+//初次进入游戏加载页面
+void Welcome() 
+{
+	handle = GetStdHandle(STD_OUTPUT_HANDLE);
+	crd.X = 17;
+	crd.Y = 10;
+	SetConsoleCursorPosition(handle, crd);
+	cout << "Welcome to Type Game";
+	crd.X = 17;
+	crd.Y = 12;
+	SetConsoleCursorPosition(handle, crd);
+	cout << "Press any key to continue···";
+}
+int main()
+{
+	system("mode con cols=60 lines=31");
+	Welcome();
+	return 0;
+}

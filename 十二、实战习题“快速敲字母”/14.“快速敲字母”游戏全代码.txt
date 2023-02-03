@@ -1,0 +1,289 @@
+#include<windows.h>
+#pragma comment(lib,"winmm.lib")//需要使用PlaySound函数播放音效
+#include<iostream>
+#include<conio.h>//使用getch()函数
+#include<vector>//需要在LetterShower中使用向量
+#include<time.h>
+using namespace std;
+HANDLE handle;//获得输出设备句柄
+COORD crd;//用于设置输出坐标
+const short GROUND = 27;//地面坐标
+const short SCR_WIDTH = 60;//地面宽度
+const short HEALTH = 5;
+//管理生命力的变化
+class Vitality 
+{
+private:
+	short vitality;//剩余血量
+public:
+	Vitality() { vitality = HEALTH; }
+	//显示当前血量
+	void ShowVitality()
+	{
+		crd.X = SCR_WIDTH * 0.6;
+		crd.Y = 0;
+		SetConsoleCursorPosition(handle,crd);
+		SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN);
+		cout << "HP:";//hit points血量
+		for (short i = 0;i < HEALTH;i++)
+		{
+			cout << (i<vitality?"▊ ":"__");
+		}
+		//恢复黑底白字
+		SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN| FOREGROUND_BLUE);
+	}
+	//处理扣血
+	short GetWoud(short n = -1)
+	{
+		vitality += n;
+		ShowVitality();
+		return vitality;
+	}
+	short GetRestore()
+	{
+		vitality = HEALTH;
+		ShowVitality();
+		return vitality;
+	}
+};
+//此处将Vitality对象定义为全局变量，就可以在LetterShower类的函数中访问它
+Vitality vty;
+//建立“字母”结构体
+struct Letter 
+{
+	char letter;//当前字母
+	short x;//x轴坐标
+	short y;//y轴坐标
+};
+//管理产生字母、字母下落、掉落地面等行为
+class LetterShower
+{
+private:
+	//建立26个成员的向量数组，下标为0的保存字母A的出现，下落情况，下标25的保存Z的各种情况
+	vector<Letter>letters[26];
+	short score;//保存玩家得分
+	short delay;//字母掉落时延迟的毫秒数
+	//判断一个字母已掉落到地面
+	bool Ground(Letter l)
+	{
+		return l.y >= GROUND;//落地为真，不落地为假
+	}
+public:
+	LetterShower(){score = 0;}
+	//新产生一个字母并进入向量
+	void GenerateLetter() {
+		Letter l = { 'A'+rand() % 26,rand()%SCR_WIDTH,1};//会进行ASCII码相加
+		letters[l.letter - 'A'].push_back(l);
+	}
+	//管理字母的掉落、触地
+	short Fall()
+	{
+		short i;
+		vector<Letter>::iterator itr;
+		//外层循环是字母A~Z的遍历，遍历下标为0~25的向量
+		for (i = 0;i < 26;i++)
+		{
+			//若同一字母现后出现在屏幕上不同位置，靠内层循环依次处理
+			for (itr = letters[i].begin();itr != letters[i].end();)
+			{
+				//获得字母原来的位置坐标，准备输出空格将其擦除
+				crd.X = itr->x;
+				crd.Y = itr->y;
+				SetConsoleCursorPosition(handle, crd);
+				cout << ' ';
+				if (Ground(*itr))//若字母已落地，则需要处理扣血
+				{
+					if (vty.GetWoud()<=0)//处理Game Over的输出信息
+					{
+						crd.X = 13;
+						crd.Y = GROUND + 2;
+						SetConsoleCursorPosition(handle, crd);
+						SetConsoleTextAttribute(handle, BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
+						cout << "GAME OVER!";
+						SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+						PlaySound(".\\sound\\over.wav",NULL,SND_ASYNC|SND_FILENAME);
+						return -1;//返回-1告知本函数的调用块游戏已结束
+					}
+					itr=letters[i].erase(itr);//将落地的字母从向量当中清除掉
+					PlaySound(".\\sound\\wound.wav", NULL,SND_ASYNC | SND_FILENAME);
+					continue;
+				}
+				itr->y++;
+				crd.Y=itr->y;
+				SetConsoleCursorPosition(handle, crd);
+				cout << itr->letter;
+				itr++;
+			}
+		}
+		return 0;//返回0表明尚未GAME OVER
+	}
+	// 显示得分的函数
+	void ClearAll()
+	{
+		for (short i = 0;i < 26;i++)
+			while (!letters[i].empty())letters[i].pop_back();
+		score = 0;
+	}
+	void ShowScore()
+	{
+		crd.X = 1;
+		crd.Y = GROUND + 2;
+		SetConsoleCursorPosition(handle, crd);
+		cout << "Score：" << score << " ";
+	}
+	//字母持续掉落的实现
+	void SetDelay(short d) { delay = d; }
+	void Wait() { Sleep(delay); }
+	//让字母反复执行Fall函数，持续向下掉落，并捕捉用户的按键，消除被按中的字母
+	void Rain()
+	{
+		char ch;//保存用户按键信息
+		vector<Letter>::iterator itr;
+Repeat://标签
+		while (!_kbhit())
+		{
+			if(Fall()==-1) return;
+			Wait();
+			//每次循环有1/3的概率产生一个新字母
+			if (rand() % 3 == 0)GenerateLetter();
+		}
+		//按键消除字母,若按下的键不是字母键，则不进入这个代码块
+		ch = _getch();
+		if(ch>='a'&&ch<='z')
+		{
+			if (!letters[ch - 'a'].empty())
+			{
+				itr = letters[ch - 'a'].begin();
+				crd.X = itr->x;
+				crd.Y = itr->y;
+				SetConsoleCursorPosition(handle, crd);
+				cout << ' ';//输出空格将原本在该坐标的字母覆盖
+				itr=letters[ch - 'a'].erase(itr);
+				//播放消除字母音效,第三个参数是两个参数按“位或”运算
+				PlaySound(".\\sound\\erase.wav", NULL, SND_ASYNC | SND_FILENAME);
+				score++;
+				ShowScore();
+			}
+		}
+		goto Repeat;//回到标签位置(while (!kbhit())的位置)
+	}
+};
+//完成显示级别函数,PrintLevel函数没有封装在LetterShower类里面
+//参数为0，1，2分别表示EASY,INTERMEDIATE,HARD
+void PrintLevel(short lv)
+{
+	crd.X = 4;
+	crd.Y = 0;
+	SetConsoleCursorPosition(handle, crd);
+	switch (lv)
+	{
+	case 0:cout << "Level: EASY";break;
+	case 1:cout << "Level: INTERMEDIATE";break;
+	default:cout << "Level: HARD";break;
+	}
+}
+void Welcome() 
+{
+	handle = GetStdHandle(STD_OUTPUT_HANDLE);
+	crd.X = 17;
+	crd.Y = 10;
+	SetConsoleCursorPosition(handle, crd);
+	cout << "Welcome to Type Game";
+	crd.X = 17;
+	crd.Y = 12;
+	SetConsoleCursorPosition(handle, crd);
+	cout << "Press any key to continue···";
+}
+//菜单函数,返回值显示用户难度级别。简单：0，中级：1，困难：2.
+short ShowMenu()
+{
+	system("cls");
+	crd.X = 10, crd.Y = 10;
+	SetConsoleCursorPosition(handle, crd);
+	cout << "Which level do you want to try？" << endl;
+	short result=0;//用result变量跟踪用户当前选中的菜单项
+	char ch=0;//ch接受了用户按键的信息之后，我们再判断ch的值，进行下一步动作
+	do {
+		if (ch == 75)result = (result + 2) % 3;//按下了向左方向键
+		if (ch == 77)result = (result + 1) % 3;//按下了向右方向键
+		crd.X = 10;
+		crd.Y = 12;
+		SetConsoleCursorPosition(handle, crd);
+		if (result == 0)
+		{
+			SetConsoleTextAttribute(handle, BACKGROUND_GREEN);//选中这项
+		}
+		else {
+			//未选中这项
+			SetConsoleTextAttribute(handle, FOREGROUND_RED| FOREGROUND_GREEN|FOREGROUND_BLUE);
+		}
+		cout << " EASY ";
+		crd.X = 20;
+		crd.Y = 12;
+		SetConsoleCursorPosition(handle, crd);
+		if (result == 1)
+		{
+			SetConsoleTextAttribute(handle, BACKGROUND_GREEN);//选中这项
+		}
+		else {
+			//未选中这项
+			SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+		}
+		cout << " INTERMEDIATE ";
+		crd.X = 38;
+		crd.Y = 12;
+		SetConsoleCursorPosition(handle, crd);
+		if (result == 2)
+		{
+			SetConsoleTextAttribute(handle, BACKGROUND_GREEN);//选中这项
+		}
+		else {
+			//未选中这项
+			SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+		}
+		cout << " HARD ";
+		ch = _getch();//getch将造成阻塞，等待用户按键
+		if (ch == 0) ch = _getch();
+	} while (ch!=VK_RETURN);//只有当按下回车键才结束循环
+	//结束前恢复黑底白字
+	SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	return result;
+}
+//绘制地面
+void DrawGround()
+{
+	crd.X = 0;
+	crd.Y = GROUND + 1;
+	SetConsoleCursorPosition(handle, crd);
+	for (short i = 0;i < SCR_WIDTH;i++) cout << "=";
+}
+int main()
+{
+	system("mode con cols=60 lines=31");//设置窗体尺寸
+	handle=GetStdHandle(STD_OUTPUT_HANDLE);
+	Welcome();//显示欢迎界面
+	_getch();
+	srand(time(0));//获得随机种子
+	char choice;//确定用户是否继续玩游戏
+	short level;//接受用户选则的难度级别
+	LetterShower ls;
+	do {
+		//若第一次循环，则清除欢迎界面的文字，若第二、三次循环，则除掉窗体上的已有的字母
+		system("cls");
+		level = ShowMenu();
+		//将前一行代码现实的三个菜单项擦去
+		system("cls");
+		vty.GetRestore();//血量恢复满状态
+		vty.ShowVitality();//显示血量
+		PrintLevel(level);
+		DrawGround();
+		ls.ClearAll();//得分归0，并清空向量
+		ls.ShowScore();
+		ls.SetDelay(300-level*60);
+		ls.Rain();
+		cout << "    Try again?(y/n):";
+		cin >> choice;
+
+	} while (choice == 'Y' || choice == 'y');
+	return 0;
+}

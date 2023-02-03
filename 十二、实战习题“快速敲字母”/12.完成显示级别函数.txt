@@ -1,0 +1,14 @@
+//完成显示级别函数,PrintLevel函数没有封装在LetterShower类里面
+//参数为0，1，2分别表示EASY,INTERMEDIATE,HARD
+void PrintLevel(short lv)
+{
+	crd.X = 4;
+	crd.Y = 0;
+	SetConsoleCursorPosition(handle, crd);
+	switch (lv)
+	{
+	case 0:cout << "Level: EASY";break;
+	case 1:cout << "Level: INTERMEDIATE";break;
+	default:cout << "Level: HARD";break;
+	}
+}

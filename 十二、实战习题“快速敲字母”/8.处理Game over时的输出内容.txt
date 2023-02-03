@@ -1,0 +1,36 @@
+//管理字母的掉落、触地
+	short Fall()
+	{
+		short i;
+		vector<Letter>::iterator itr;
+		//外层循环是字母A~Z的遍历，遍历下标为0~25的向量
+		for (i = 0;i < 26;i++)
+		{
+			//若同一字母现后出现在屏幕上不同位置，靠内层循环依次处理
+			for (itr = letters[i].begin();itr != letters[i].end();itr++)
+			{
+				//获得字母原来的位置坐标，准备输出空格将其擦除
+				crd.X = itr->x;
+				crd.Y = itr->y;
+				SetConsoleCursorPosition(handle, crd);
+				cout << ' ';
+				if (Ground(*itr))//若字母已落地，则需要处理扣血
+				{
+					if (vty.GetWoud()<=0)//处理Game Over的输出信息
+					{
+						crd.X = 13;
+						crd.Y = GROUND + 2;
+						SetConsoleCursorPosition(handle, crd);
+						SetConsoleTextAttribute(handle, BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
+						cout << "GAME OVER!";
+						SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+						PlaySound(".\\sound\\over.wav",NULL,SND_ASYNC|SND_FILENAME);
+						return -1;//返回-1告知本函数的调用块游戏已结束
+					}
+					letters[i].erase(itr);//将落地的字母从向量当中清除掉
+					PlaySound(".\\sound\\wound.wav", NULL,SND_ASYNC | SND_FILENAME);
+					break;
+				}
+			}
+		}
+	}

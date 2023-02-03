@@ -1,0 +1,43 @@
+//管理生命力的变化
+class Vitality 
+{
+private:
+	short vitality;//剩余血量
+public:
+	Vitality() { vitality = HEALTH; }
+	//显示当前血量
+	void ShowVitality()
+	{
+		crd.X = SCR_WIDTH * 0.6;
+		crd.Y = 0;
+		SetConsoleCursorPosition(handle,crd);
+		SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN);
+		cout << "HP:";//hit points血量
+		for (short i = 0;i < HEALTH;i++)
+		{
+			cout << (i<vitality?"▊ ":"__");
+		}
+		//恢复黑底白字
+		SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN| FOREGROUND_BLUE);
+	}
+	//处理扣血
+	short GetWoud(short n = -1)
+	{
+		vitality += n;
+		ShowVitality();
+		return vitality;
+	}
+	short GetRestore()
+	{
+		vitality = HEALTH;
+		ShowVitality();
+		return vitality;
+	}
+};
+//建立“字母”结构体
+struct Letter 
+{
+	char letter;//当前字母
+	short x;//x轴坐标
+	short y;//y轴坐标
+};

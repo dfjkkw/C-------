@@ -1,0 +1,28 @@
+//判断一个字母已掉落到地面
+	bool Ground(Letter l)
+	{
+		return l.y >= GROUND;//落地为真，不落地为假
+	}
+//管理字母的掉落、触地
+	void Fall()
+	{
+		short i;
+		vector<Letter>::iterator itr;
+		//外层循环是字母A~Z的遍历，遍历下标为0~25的向量
+		for (i = 0;i < 26;i++)
+		{
+			//若同一字母现后出现在屏幕上不同位置，靠内层循环依次处理
+			for (itr = letters[i].begin();itr != letters[i].end();itr++)
+			{
+				//获得字母原来的位置坐标，准备输出空格将其擦除
+				crd.X = itr->x;
+				crd.Y = itr->y;
+				SetConsoleCursorPosition(handle, crd);
+				cout << ' ';
+				if (Ground(*itr))//字母已落地
+				{
+					vty.GetWoud();//扣一点血
+				}
+			}
+		}
+	}

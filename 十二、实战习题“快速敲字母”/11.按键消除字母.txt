@@ -1,0 +1,18 @@
+//按键消除字母,若按下的键不是字母键，则不进入这个代码块
+		ch = getch();
+		if(ch>='a'&&ch<='z')
+		{
+			if (!letters[ch - 'a'].empty())
+			{
+				itr = letters[ch - 'a'].begin();
+				crd.X = itr->x;
+				crd.Y = itr->y;
+				SetConsoleCursorPosition(handle, crd);
+				cout << ' ';//输出空格将原本在该坐标的字母覆盖
+				itr=letters[ch - 'a'].erase(itr);
+				//播放消除字母音效,第三个参数是两个参数按“位或”运算
+				PlaySound(".\\sound\\erase.wav", NULL, SND_ASYNC | SND_FILENAME);
+				score++;
+				ShowScore();
+			}
+		}

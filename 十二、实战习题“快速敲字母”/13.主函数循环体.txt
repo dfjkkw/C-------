@@ -1,0 +1,30 @@
+int main()
+{
+	system("mode con cols=60 lines=31");//设置窗体尺寸
+	handle=GetStdHandle(STD_OUTPUT_HANDLE);
+	Welcome();//显示欢迎界面
+	_getch();
+	srand(time(0));//获得随机种子
+	char choice;//确定用户是否继续玩游戏
+	short level;//接受用户选则的难度级别
+	LetterShower ls;
+	do {
+		//若第一次循环，则清除欢迎界面的文字，若第二、三次循环，则除掉窗体上的已有的字母
+		system("cls");
+		level = ShowMenu();
+		//将前一行代码现实的三个菜单项擦去
+		system("cls");
+		vty.GetRestore();//血量恢复满状态
+		vty.ShowVitality();//显示血量
+		PrintLevel(level);
+		DrawGround();
+		ls.ClearAll();//得分归0，并清空向量
+		ls.ShowScore();
+		ls.SetDelay(300-level*60);
+		ls.Rain();
+		cout << "    Try again?(y/n):";
+		cin >> choice;
+
+	} while (choice == 'Y' || choice == 'y');
+	return 0;
+}

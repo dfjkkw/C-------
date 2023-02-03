@@ -1,0 +1,49 @@
+//菜单函数,返回值显示用户难度级别。简单：0，中级：1，困难：2.
+void ShowMenu()
+{
+	crd.X = 10, crd.Y = 10;
+	SetConsoleCursorPosition(handle, crd);
+	cout << "Which level do you want to try？" << endl;
+	short result=0;//用result变量跟踪用户当前选中的菜单项
+	char ch;//ch接受了用户按键的信息之后，我们再判断ch的值，进行下一步动作
+	do {
+		crd.X = 10;
+		crd.Y = 12;
+		SetConsoleCursorPosition(handle, crd);
+		if (result == 0)
+		{
+			SetConsoleTextAttribute(handle, BACKGROUND_GREEN);//选中这项
+		}
+		else {
+			//未选中这项
+			SetConsoleTextAttribute(handle, FOREGROUND_RED| FOREGROUND_GREEN|FOREGROUND_BLUE);
+		}
+		cout << " EASY ";
+		crd.X = 20;
+		crd.Y = 12;
+		SetConsoleCursorPosition(handle, crd);
+		if (result == 1)
+		{
+			SetConsoleTextAttribute(handle, BACKGROUND_GREEN);//选中这项
+		}
+		else {
+			//未选中这项
+			SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+		}
+		cout << " INTERMEDIATE ";
+		crd.X = 38;
+		crd.Y = 12;
+		SetConsoleCursorPosition(handle, crd);
+		if (result == 2)
+		{
+			SetConsoleTextAttribute(handle, BACKGROUND_GREEN);//选中这项
+		}
+		else {
+			//未选中这项
+			SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+		}
+		cout << " HARD ";
+		ch = _getch();//getch将造成阻塞，等待用户按键
+		if (ch == 0) ch = _getch();
+	} while (ch!=VK_RETURN);//只有当按下回车键才结束循环
+}

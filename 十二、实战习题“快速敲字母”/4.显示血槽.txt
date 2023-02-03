@@ -1,0 +1,20 @@
+//显示血槽
+const short HEALTH = 5;
+class Vitality {
+private:
+	short vitality;//剩余血量
+public:
+	Vitality() { vitality = HEALTH; }
+	void ShowVitality()
+	{
+		crd.X = SCR_WIDTH * 0.6;
+		crd.Y = 0;
+		SetConsoleCursorPosition(handle,crd);
+		SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN);
+		cout << "HP:";//hit points血量
+		for (short i = 0;i < HEALTH;i++)
+		{
+			cout << (i<vitality?"▊ ":"__");
+		}
+	}
+};

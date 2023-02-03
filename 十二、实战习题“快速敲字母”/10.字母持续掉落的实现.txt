@@ -1,0 +1,18 @@
+	//字母持续掉落的实现
+	void SetDelay(short d) { delay = d; }
+	void Wait() { Sleep(delay); }
+	//让字母反复执行Fall函数，持续向下掉落，并捕捉用户的按键，消除被按中的字母
+	void Rain()
+	{
+		char ch;//保存用户按键信息
+		vector<Letter>::iterator itr;
+		while (!kbhit())
+		{
+			if(Fall()==-1) return;
+			Wait();
+			//每次循环有1/3的概率产生一个新字母
+			if (rand() % 3 == 0)GenerateLetter();
+		}
+		ch = getch();
+		if(ch>='a'&&ch<='z'){}
+	}

@@ -1,0 +1,14 @@
+//管理产生字母、字母下落、掉落地面等行为
+class LetterShower
+{
+private:
+	//建立26个成员的向量数组，下标为0的保存字母A的出现，下落情况，下标25的保存Z的各种情况
+	vector<Letter>letters[26];
+	short score;//保存玩家得分
+public:
+	LetterShower(){score = 0;}
+	void GenerateLetter() {
+		Letter l = { 'A'+rand() % 26,rand()%SCR_WIDTH,1};//会进行ASCII码相加
+		letters[l.letter - 'A'].push_back(l);
+	}
+};
