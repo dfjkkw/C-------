@@ -1,0 +1,13 @@
+//添加皇后类
+class Queen
+{
+public:
+	short x;//x坐标
+	short y;//y坐标
+	Queen(short _x = 0, short _y = 0) :x(_x), y(_y) {};
+	//能相互攻击返回true
+	bool Attack(Queen& queen)
+	{
+		return x==queen.x ||x-y==queen.x-queen.y|| x + y == queen.x + queen.y || y == queen.y;
+	}
+};

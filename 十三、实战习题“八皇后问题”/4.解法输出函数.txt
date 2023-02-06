@@ -1,0 +1,20 @@
+void PrintQueens(vector<Queen>& v)
+{
+	cout << "发现新的皇后摆法"<<endl;
+	short i, j;
+	vector<Queen>::iterator itr = v.begin();
+	for (i = 0;i < 8;i++)//对各行进行遍历
+	{
+		for (j = 0;j < 8;j++)//对各列进行遍历
+		{
+			if (i == itr->y && j == itr->x)
+			{
+				cout << "后";
+				itr++;
+			}
+			else
+				cout << "□";
+		}
+		cout << endl;
+	}
+}

@@ -1,0 +1,39 @@
+	for (i = 0;i < 8;i++)//行遍历
+	{
+		j = 0;
+Repeat:
+		for (;j < 8;j++)//列遍历
+		{
+			q = new Queen(j,i);//建立新皇后
+			for (itr = vt.begin();itr != vt.end();itr++)//将新建的皇后q与已进入向量的各个皇后进行互吃测试
+			{
+				if (q->Attack(*itr))
+				{
+					delete q;//释放不可用的皇后所占的内存空间
+					break;
+				}
+			}
+			if (itr == vt.end())//q不与向量中任何皇后相冲突
+			{
+				vt.push_back(*q);//皇后q纳入向量
+				delete q;
+				if (vt.size() == 8)
+				{
+					//一整行没有皇后的位置或正好找到一种解法的时候都需要回溯
+					PrintQueens(vt);//输出摆法
+					//人为的将j赋值为8，使流程接下来可以进入if(j==8)代码块去回溯重试
+					j=8;
+				}
+				break;//退出列遍历，直接测试下一行的第一列
+			}
+		}
+		//向量尾部的皇后若正好是当前行最后一列的位置，是不能再将x坐标后移的，故必须多弹出一次
+		if (j == 8)//当前这一行一整行都不能安放皇后
+		{
+			if (vt.back().x == 7)vt.pop_back();
+			i = vt.back().y;
+			j = vt.back().x + 1;
+			vt.pop_back();
+			goto Repeat;
+		}
+	}
