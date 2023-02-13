@@ -1,0 +1,20 @@
+//创建方块形状（看成在2*4（行*列）的八个正方体中截取4个正方体组成的图形）
+	int blocks[7][4] = {
+		1,3,5,7,//I型
+		2,4,5,7,//Z 1型
+		3,5,4,6,//Z 2型
+		3,5,4,7,//T型
+		2,3,5,7,//L型
+		3,5,7,6,//J型
+		2,3,4,5,//田型
+	};
+
+	//随机生成一个俄罗斯方块
+	blockType=rand() % 7+1;//1+(0~6)=>（1~7）
+	//初始化smallBlocks数组
+	for (int i = 0;i < 4;i++)
+	{
+		int value = blocks[blockType - 1][i];
+		smallBlocks[i]->row = value / 2;
+		smallBlocks[i]->col = value % 2;
+	}

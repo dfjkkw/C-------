@@ -1,0 +1,30 @@
+void Block::rotate()
+{
+	Point p = smallBlocks[1];//以第一个方块为中心
+
+	for (int i = 0;i < 4;i++)
+	{
+		Point tmp = smallBlocks[i];
+		smallBlocks[i].col = p.col - tmp.row + p.row;
+		smallBlocks[i].row = p.row + tmp.col - p.col;
+	}
+}
+
+int Block::getBlockType()
+{
+	return blockType;
+}
+
+void Tetris::rotate()
+{
+	//方块类型为田字型
+	if (curBlock->getBlockType() == 7)return;
+
+	bakBlock = *curBlock;
+	curBlock->rotate();
+	//不合法还原
+	if (!curBlock->blockInMap(map))
+	{
+		*curBlock = bakBlock;
+	}
+}

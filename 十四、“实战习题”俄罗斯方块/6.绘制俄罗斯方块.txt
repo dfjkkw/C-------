@@ -1,0 +1,7 @@
+//绘制俄罗斯方块
+	for (int i = 0;i < 4;i++)
+	{
+		int x = leftMargin + (smallBlocks[i]->col) * size;
+		int y = topMargin + (smallBlocks[i]->row) * size;
+		putimage(x, y, img);
+	}

@@ -1,0 +1,18 @@
+void Tetris::drawScore()
+{
+	char scoreText[32];
+	sprintf_s(scoreText, sizeof(scoreText), "%d", score);
+
+	setcolor(RGB(180, 180, 180));
+	LOGFONT f;
+	gettextstyle(&f);
+	f.lfHeight = 60;
+	f.lfWeight = 30;
+	f.lfQuality = ANTIALIASED_QUALITY;//设置字体为“抗锯齿”效果
+	strcpy_s(f.lfFaceName, sizeof(f.lfFaceName), _T("Segoe UI Block"));
+	settextstyle(&f);
+
+	setbkmode(TRANSPARENT);//字体的背景设置为透明效果
+
+	outtextxy(670, 727, scoreText);
+}

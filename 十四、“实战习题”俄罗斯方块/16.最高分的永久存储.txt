@@ -1,0 +1,69 @@
+void Tetris::init()
+{
+	delay = SPEED_NORMAL[0];
+	//配置随机种子
+	srand(time(NULL));
+
+	//创建游戏窗口
+	initgraph(938,896);
+	//加载背景图片
+	loadimage(&imgBg, "res/bg2.png");
+	//初始化游戏区中的数据
+	char data[20][10];
+	for (int i = 0;i < rows;i++)
+	{
+		for (int j = 0;j < cols;j++)
+		{
+			map[i][j] = 0;
+		}
+	}
+
+	score = 0;
+	lineCount = 0;
+	level = 1;
+
+	//初始化最高分
+	ifstream file(RECORDER_FILE);
+	if (!file.is_open())
+	{
+		cout << RECORDER_FILE << "打开失败" << endl;
+		highestScore = 0;
+	}
+	else {
+		file >> highestScore;
+	}
+	file.close();//关闭文件
+}
+
+void Tetris::drawScore()
+{
+	char scoreText[32];
+	sprintf_s(scoreText, sizeof(scoreText), "%d", score);
+
+	setcolor(RGB(180, 180, 180));
+	LOGFONT f;
+	gettextstyle(&f);
+	f.lfHeight = 60;
+	f.lfWidth = 30;
+	f.lfQuality = ANTIALIASED_QUALITY;//设置字体为“抗锯齿”效果
+	strcpy_s(f.lfFaceName, sizeof(f.lfFaceName), _T("Segoe UI Block"));
+	settextstyle(&f);
+
+	setbkmode(TRANSPARENT);//字体的背景设置为透明效果
+
+	outtextxy(670, 727, scoreText);
+	
+	//绘制消除了多少行
+	sprintf_s(scoreText, sizeof(scoreText), "%d", lineCount);
+	gettextstyle(&f);
+	int xPos = 224 - f.lfWidth * strlen(scoreText);
+	outtextxy(xPos, 817, scoreText);
+
+	//绘制当前是第几关
+	sprintf_s(scoreText, sizeof(scoreText), "%d", level);
+	outtextxy(224-30, 727, scoreText);
+
+	//绘制当前最高分
+	sprintf_s(scoreText, sizeof(scoreText), "%d", highestScore);
+	outtextxy(670, 817, scoreText);
+}

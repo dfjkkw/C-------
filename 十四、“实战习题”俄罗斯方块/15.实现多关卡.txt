@@ -1,0 +1,70 @@
+void Tetris::clearLine()
+{
+	int lines = 0;
+	int k = rows - 1;//存储数据的行数
+	for (int i = rows - 1;i >= 0;i--)
+	{
+		//检查第i行是否满行
+		int count = 0;
+		for (int j = 0;j < cols;j++)
+		{
+			if (map[i][j])
+			{
+				count++;
+			}
+			map[k][j] = map[i][j];//一边扫描一边存储
+		}
+
+		if (count < cols)//不是满行
+		{
+			k--;
+		}
+		else {//是满行count==cols
+			lines++;
+		}
+	}
+
+	if (lines > 0)
+	{
+		//计算得分
+		int addScore[4] = { 10,30,60,80 };
+		score += addScore[lines - 1];
+
+		mciSendString("play res/xiaochu.mp3", 0, 0, 0);
+		update = true;
+
+		//每100分一个级别，0-100第一关，101-200第二关······
+		level = (score + 99) / 100;
+		lineCount += lines;
+	}
+}
+
+void Tetris::drawScore()
+{
+	char scoreText[32];
+	sprintf_s(scoreText, sizeof(scoreText), "%d", score);
+
+	setcolor(RGB(180, 180, 180));
+	LOGFONT f;
+	gettextstyle(&f);
+	f.lfHeight = 60;
+	f.lfWidth = 30;
+	f.lfQuality = ANTIALIASED_QUALITY;//设置字体为“抗锯齿”效果
+	strcpy_s(f.lfFaceName, sizeof(f.lfFaceName), _T("Segoe UI Block"));
+	settextstyle(&f);
+
+	setbkmode(TRANSPARENT);//字体的背景设置为透明效果
+
+	outtextxy(670, 727, scoreText);
+	
+	//绘制消除了多少行
+	sprintf_s(scoreText, sizeof(scoreText), "%d", lineCount);
+	gettextstyle(&f);
+	int xPos = 224 - f.lfWidth * strlen(scoreText);
+	outtextxy(xPos, 817, scoreText);
+
+	//绘制当前是第几关
+	sprintf_s(scoreText, sizeof(scoreText), "%d", level);
+	gettextstyle(&f);
+	outtextxy(224-30, 727, scoreText);
+}

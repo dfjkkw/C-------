@@ -1,0 +1,140 @@
+void Tetris::init()
+{
+	mciSendString("play res/bg.mp3 repeat", 0, 0, 0);
+	delay = SPEED_NORMAL[0];
+	//配置随机种子
+	srand(time(NULL));
+
+	//创建游戏窗口
+	initgraph(938,896);
+	//加载背景图片
+	loadimage(&imgBg, "res/bg2.png");
+
+	loadimage(&imgWin, "res/win.png");
+	loadimage(&imgOver, "res/over.png");
+
+	//初始化游戏区中的数据
+	char data[20][10];
+	for (int i = 0;i < rows;i++)
+	{
+		for (int j = 0;j < cols;j++)
+		{
+			map[i][j] = 0;
+		}
+	}
+
+	score = 0;
+	lineCount = 0;
+	level = 1;
+
+	//初始化最高分
+	ifstream file(RECORDER_FILE);
+	if (!file.is_open())
+	{
+		cout << RECORDER_FILE << "打开失败" << endl;
+		highestScore = 0;
+	}
+	else {
+		file >> highestScore;
+	}
+	file.close();//关闭文件
+	gameOver = false;
+}
+
+void Tetris::drop()
+{
+	bakBlock = *curBlock;
+	curBlock->drop();
+
+	if (!curBlock->blockInMap(map))
+	{
+		//把这个方块“固化”
+		bakBlock.soildfy(map);
+		delete curBlock;
+		curBlock = nextBlock;
+		nextBlock = new Block;
+
+		//检查游戏是否结束
+		checkOver();
+	}
+
+	delay = SPEED_NORMAL[level-1];
+}
+
+void Tetris::clearLine()
+{
+	int lines = 0;
+	int k = rows - 1;//存储数据的行数
+	for (int i = rows - 1;i >= 0;i--)
+	{
+		//检查第i行是否满行
+		int count = 0;
+		for (int j = 0;j < cols;j++)
+		{
+			if (map[i][j])
+			{
+				count++;
+			}
+			map[k][j] = map[i][j];//一边扫描一边存储
+		}
+
+		if (count < cols)//不是满行
+		{
+			k--;
+		}
+		else {//是满行count==cols
+			lines++;
+		}
+	}
+
+	if (lines > 0)
+	{
+		//计算得分
+		int addScore[4] = { 10,30,60,80 };
+		score += addScore[lines - 1];
+
+		mciSendString("play res/xiaochu.mp3", 0, 0, 0);
+		update = true;
+
+		//每100分一个级别，0-100第一关，101-200第二关······
+		level = (score + 99) / 100;
+		if (level > MAX_LEVEL)
+		{
+			gameOver = true;
+		}
+		lineCount += lines;
+	}
+}
+
+void Tetris::checkOver()
+{
+	gameOver = (curBlock->blockInMap(map) == false);
+}
+
+void Tetris::saveScore()
+{
+	if (score > highestScore)
+	{
+		highestScore = score;
+
+		ofstream file(RECORDER_FILE);
+		file << highestScore << endl;
+		file.close();
+	}
+}
+
+void Tetris::displayOver()
+{
+	mciSendString("stop res/bg.mp3", 0, 0, 0);
+
+	//判断是胜利结束还是失败结束
+	if (level <= MAX_LEVEL)
+	{
+		putimage(262, 361, &imgOver);
+		mciSendString("play res/over.mp3", 0, 0, 0);
+	}
+	else {
+		putimage(262, 361, &imgWin);
+		mciSendString("play res/win.mp3", 0, 0, 0);
+	}
+}
