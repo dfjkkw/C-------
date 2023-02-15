@@ -1,0 +1,42 @@
+//map容器在该题里作用主要是pair对——key值是结点data，value值是结点的位置（0~n-1） 
+#include <iostream>
+#include <map>
+using namespace std;
+ 
+int main()
+{
+    int n;
+    cin >> n;
+    int index[n]={0}; //标记是否有孩子
+    map <int,int> m;
+    int tree[n]; //tree数组用于存放各结点的data
+    
+    int root; //输入根节点的data
+    cin >> root;
+    m[root]=0; //根节点的位置是0
+    
+    if(n==1) //如果只有一个结点 则叶结点之和为根的data
+    {
+        cout << root;
+        return 0;
+    }
+    
+    for(int i=1;i<n;i++)
+    {
+        int pr,d,e; //pr父节点的data d方向 e结点的data
+        cin >> pr >> d >> e;
+        
+        index[m[pr]]=1;
+        m[e]=i; //记录结点位置
+        tree[i] = e;
+    }
+    
+    int sum=0;
+    for(int i=0;i<n;i++)
+    {
+        if(index[i]==0) sum+=tree[i];
+    }
+    cout << sum;
+    
+    return 0;
+}
