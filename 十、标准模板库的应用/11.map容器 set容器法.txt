@@ -1,0 +1,49 @@
+/*
+for(auto x : s)
+x 是一个变量，s 是一个序列，该循环将 x 作用于序列 s 中的每个元素
+int main()
+{
+    string s="abcd";
+    for(auto x:s)
+        out(x); //输出abcd
+}
+*/
+#include<iostream>
+#include<map>
+#include<set>
+using namespace std;
+int main()
+{
+	int n,root;
+	printf("n=");
+	cin>>n;
+	printf("root=");
+	cin>>root;
+	if(n==1)
+	{
+		cout<<root<<endl;
+		return 0;
+	}
+	map<int ,bool>m;
+	set<int>s;
+	while(n--)
+	{
+		int pr,d,e;
+		printf("pr d e的值分别为:");
+		cin>>pr>>d>>e;
+		m[pr]=true;//标记
+		
+		s.insert(pr);//set容器里的元素不重复
+		s.insert(e);
+	}
+	int sum=0;
+	for(auto x:s)
+	{
+		if(m[x]==false)
+		{
+			sum+=x;
+		}
+	}
+	cout<<sum<<endl;
+	return 0;
+}
